@@ -1,44 +1,70 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#381221"><meta name="robots" content="noindex,nofollow">
-  <meta name="description" content="A layered invitation to celebrate the wedding of Vinayak and Aambadi on 11 February 2027 in Kerala.">
-  <meta property="og:title" content="Vinayak & Aambadi — 11 February 2027"><meta property="og:image" content="assets/card-front.png">
-  <title>Vinayak &amp; Aambadi | A celebration in Kerala</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#230e1a">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Together with their families, Vinayak and Aambadi invite you to celebrate their wedding on 11 February 2027 in Neyyattinkara, Kerala.">
+  <meta property="og:title" content="Vinayak & Aambadi | 11 February 2027">
+  <meta property="og:description" content="We would love to celebrate our wedding with you in Neyyattinkara, Kerala.">
+  <meta property="og:image" content="assets/illustrated-couple-portrait.webp">
+  <title>Vinayak &amp; Aambadi | Wedding invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600&family=Noto+Serif+Malayalam:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="style-tuning.css"><script defer src="main.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="vendor/gsap.min.js"></script>
+  <script defer src="vendor/ScrollTrigger.min.js"></script>
+  <script defer src="main.js"></script>
 </head>
 <body>
-  <a class="skip" href="#invitation">Skip to invitation</a><div class="grain" aria-hidden="true"></div><div class="scroll-progress" aria-hidden="true"></div>
-  <header class="nav" id="top"><a class="monogram" href="#top" aria-label="Vinayak and Aambadi, back to top">V<span>✦</span>A</a><nav aria-label="Main navigation"><a href="#invitation">Our invitation</a><a href="#story">Our story</a><a href="#celebrations">The day</a><a href="#ar">AR experience</a></nav><a class="nav-cta" href="ar.html">Open AR <span aria-hidden="true">↗</span></a></header>
-  <main>
+  <a class="skip-link" href="#invitation">Skip to the invitation</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Vinayak and Aambadi, back to top">V<span>✦</span>A</a>
+    <nav aria-label="Main navigation"><a href="#invitation">Invitation</a><a href="#our-story">Our story</a><a href="#the-day">The day</a></nav>
+    <a class="header-date" href="#the-day">11 February 2027</a>
+  </header>
+  <main id="top">
     <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-aura" aria-hidden="true"></div><div class="hero-rings" aria-hidden="true"><i></i><i></i><i></i></div>
-      <img class="hero-torana parallax-layer" style="--shift:-46px" src="assets/ceremonial-arch.webp" alt="">
-      <div class="hero-vertical" aria-hidden="true">A CELEBRATION IN KERALA <span>✦</span> 2027</div>
-      <div class="hero-copy"><p class="hero-malayalam" lang="ml">ശുഭമംഗളം</p><p class="hero-overture">With love and the blessings of our families</p><h1 id="hero-title"><span>Vinayak</span><b>&amp;</b><span>Aambadi</span></h1><div class="hero-rule"><i></i><span>11 February 2027</span><i></i></div><p class="hero-place">Neyyattinkara, Kerala</p><button class="primary-button" id="open-invite" type="button">Enter the invitation <span aria-hidden="true">↗</span></button></div>
-      <div class="hero-scene" aria-label="Illustration of Vinayak and Aambadi together"><div class="scene-halo parallax-layer" style="--shift:28px" aria-hidden="true"></div><div class="scene-arch parallax-layer" style="--shift:55px" aria-hidden="true"></div><div class="scene-shadow" aria-hidden="true"></div><img class="scene-couple parallax-layer" style="--shift:105px" src="assets/illustrated-couple-standing.webp" alt="Illustrated Vinayak and Aambadi in traditional wedding attire" fetchpriority="high"><span class="scene-seal parallax-layer" style="--shift:155px" aria-hidden="true">V <i>✦</i> A</span><span class="scene-blossom blossom-left parallax-layer" style="--shift:180px" aria-hidden="true">✿</span><span class="scene-blossom blossom-right parallax-layer" style="--shift:130px" aria-hidden="true">✿</span></div>
-      <a class="hero-scroll" href="#invitation">Scroll to unfold <span aria-hidden="true">↓</span></a><div class="hero-bottomline" aria-hidden="true"><span>✦</span><span>THE BEGINNING OF FOREVER</span><span>✦</span></div>
+      <div class="hero-world" aria-hidden="true">
+        <div class="hero-bg-wrap"><img class="hero-bg" src="assets/kerala-courtyard-v2.webp" width="1672" height="941" alt="" fetchpriority="high"></div>
+        <div class="hero-veil"></div><div class="hero-light"></div>
+        <div class="hero-arch"><img src="assets/ceremonial-arch.webp" width="1536" height="1024" alt=""></div>
+        <div class="hero-figure-wrap"><div class="hero-figure"><img src="assets/illustrated-couple-standing.webp" width="1024" height="1536" alt=""></div></div>
+        <div class="hero-ground"></div>
+        <span class="hero-petal petal-a"></span><span class="hero-petal petal-b"></span><span class="hero-petal petal-c"></span>
+      </div>
+      <div class="hero-copy">
+        <p class="hero-malayalam" lang="ml">ശുഭമംഗളം</p>
+        <p class="hero-prelude">Together with our families</p>
+        <h1 id="hero-title"><span class="hero-name"><span class="name-inner">Vinayak</span></span><span class="hero-amp">&amp;</span><span class="hero-name"><span class="name-inner">Aambadi</span></span></h1>
+        <p class="hero-details">Invite you to celebrate their wedding<br><strong>11 February 2027</strong> · Neyyattinkara, Kerala</p>
+        <a class="hero-cta" href="#invitation">Read our invitation <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-edge" aria-hidden="true"><span></span><i>V &amp; A</i><span></span></div>
     </section>
-    <section class="invitation-section" id="invitation" aria-labelledby="invite-title">
-      <div class="paper-corner paper-corner-a" aria-hidden="true">✧</div><div class="paper-corner paper-corner-b" aria-hidden="true">✧</div>
-      <div class="invitation-head"><span class="section-index">The invitation</span><div class="ornament" aria-hidden="true">✦ &nbsp; ✣ &nbsp; ✦</div><h2 id="invite-title">A day written<br>in <i>gold.</i></h2><p>With hearts full of joy, our families invite you to share in the wedding of Vinayak and Aambadi. Your presence and blessings will make this day complete.</p></div>
-      <div class="invitation-layout"><div class="portrait-plate parallax-layer" style="--shift:55px"><div class="portrait-rays" aria-hidden="true"></div><img src="assets/illustrated-couple-portrait.webp" alt="Illustrated portrait of Vinayak and Aambadi" loading="lazy"><span>Two hearts. One new chapter.</span></div><div class="card-display"><span class="card-caption">A keepsake to hold</span><div class="card-stage" id="card-stage"><div class="card-shadow" aria-hidden="true"></div><div class="card-under" aria-hidden="true">V <i>✦</i> A</div><img class="front-card" src="assets/card-front.webp" alt="Printed wedding card front for Vinayak and Aambadi, 11 February 2027"></div><a class="underlined-link" href="print.html">Explore the printed card <span aria-hidden="true">↗</span></a></div></div>
+
+    <section class="invitation" id="invitation" aria-labelledby="invitation-title">
+      <div class="invitation-copy"><div class="section-emblem" aria-hidden="true">✦</div><p class="script-note">With love and blessings</p><h2 id="invitation-title">The joy of this day<br>is sharing it with you.</h2><p>We, along with our families, request the honour of your presence as we begin our life together. Your blessings will make our celebration complete.</p><div class="invitation-signature">Vinayak <span>&amp;</span> Aambadi</div></div>
+      <div class="invitation-art" aria-hidden="true"><div class="art-aura"></div><div class="art-ring"></div><img src="assets/illustrated-couple-portrait.webp" width="1169" height="1346" alt="" loading="lazy"></div>
     </section>
-    <section class="story-section" id="story" aria-labelledby="story-title">
-      <div class="story-bloom story-bloom-left parallax-layer" style="--shift:-75px" aria-hidden="true">✿</div><div class="story-bloom story-bloom-right parallax-layer" style="--shift:90px" aria-hidden="true">✿</div>
-      <div class="story-copy"><span class="section-index">A little moment of us</span><h2 id="story-title">The sweetest<br>part is <i>you.</i></h2><p>What began with a smile has become a promise to walk through every season together. We would love for you to be part of the first page of that story.</p><div class="story-signature">With love,<br><strong>Vinayak &amp; Aambadi</strong></div></div>
-      <div class="story-art"><div class="story-moon parallax-layer" style="--shift:45px" aria-hidden="true"></div><img class="story-swing parallax-layer" style="--shift:110px" src="assets/illustrated-couple-swing.webp" alt="Storybook illustration of Vinayak and Aambadi together on a ceremonial swing" loading="lazy"><div class="story-frame" aria-hidden="true"></div></div>
+
+    <section class="story" id="our-story" aria-labelledby="story-title">
+      <div class="story-art" aria-hidden="true"><div class="story-disc"></div><div class="story-orbit"></div><img src="assets/illustrated-couple-swing.webp" width="1024" height="1536" alt="" loading="lazy"></div>
+      <div class="story-copy"><span class="story-flower" aria-hidden="true">✿</span><h2 id="story-title">A new chapter,<br>together.</h2><p>There is a special kind of happiness in celebrating with the people who have been part of our lives. We hope you will be there as we start this next chapter.</p><div class="story-rule"></div><p class="story-signoff">With affection,<br><strong>Vinayak &amp; Aambadi</strong></p></div>
     </section>
-    <section class="date-section" id="celebrations" aria-labelledby="date-title">
-      <div class="date-heading"><span class="section-index">The celebrations</span><h2 id="date-title">Eleventh of<br><i>February.</i></h2><p>Thursday, 2027 <span aria-hidden="true">✦</span> Neyyattinkara, Kerala</p></div>
-      <div class="date-rail" aria-label="Wedding day schedule"><article class="event"><span class="event-symbol" aria-hidden="true">✣</span><div><span class="event-time">From 8:30 am</span><h3>A morning welcome</h3><p>Join us for breakfast before the ceremony.</p></div></article><article class="event"><span class="event-symbol" aria-hidden="true">✦</span><div><span class="event-time">Muhurtham · 9:50–10:20 am</span><h3>The wedding ceremony</h3><p>Sree Neelakeshi Kalyana Mandapam<br>Marayamuttom, Neyyattinkara</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Sree+Neelakeshi+Kalyana+Mandapam+Marayamuttom" target="_blank" rel="noopener noreferrer">Find the venue ↗</a></div></article><article class="event"><span class="event-symbol" aria-hidden="true">✿</span><div><span class="event-time">4:00–8:00 pm</span><h3>An evening together</h3><p>Sreeragam Convention Centre<br>Neyyattinkara, Kerala</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Sreeragam+Convention+Centre+Neyyattinkara" target="_blank" rel="noopener noreferrer">Find the venue ↗</a></div></article></div>
+
+    <section class="celebration" id="the-day" aria-labelledby="day-title">
+      <div class="day-heading"><p>Thursday · Neyyattinkara, Kerala</p><h2 id="day-title"><span>11</span><span>February<br><i>2027</i></span></h2><div class="day-line" aria-hidden="true"></div></div>
+      <div class="events" aria-label="Wedding day schedule">
+        <article class="event"><time datetime="2027-02-11T08:30">8:30 am</time><div><h3>Morning welcome</h3><p>Join us for breakfast before the ceremony.</p></div><span class="event-mark" aria-hidden="true">✦</span></article>
+        <article class="event main-event"><time datetime="2027-02-11T09:50">9:50–10:20 am</time><div><h3>The wedding ceremony</h3><p>Muhurtham at Sree Neelakeshi Kalyana Mandapam,<br>Marayamuttom, Neyyattinkara.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Sree+Neelakeshi+Kalyana+Mandapam+Marayamuttom" target="_blank" rel="noopener noreferrer">View ceremony location <span aria-hidden="true">↗</span></a></div><span class="event-mark" aria-hidden="true">✣</span></article>
+        <article class="event"><time datetime="2027-02-11T16:00">4:00–8:00 pm</time><div><h3>Evening reception</h3><p>Sreeragam Convention Centre,<br>Neyyattinkara, Kerala.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Sreeragam+Convention+Centre+Neyyattinkara" target="_blank" rel="noopener noreferrer">View reception location <span aria-hidden="true">↗</span></a></div><span class="event-mark" aria-hidden="true">✿</span></article>
+      </div>
       <a class="calendar-link" href="wedding.ics" download>Save the date to your calendar <span aria-hidden="true">↗</span></a>
     </section>
-    <section class="ar-section" id="ar" aria-labelledby="ar-title"><div class="ar-preview" aria-hidden="true"><div class="preview-orbit orbit-outer"></div><div class="preview-orbit orbit-inner"></div><div class="preview-phone"><div class="preview-notch"></div><img class="preview-card" src="assets/card-front.webp" alt=""><img class="preview-couple" src="assets/illustrated-couple-standing.webp" alt=""><div class="preview-shine">✧ &nbsp; ✦ &nbsp; ✧</div></div><span class="preview-note">THE CARD COMES ALIVE</span></div><div class="ar-copy"><span class="section-index">A living invitation</span><h2 id="ar-title">A story that<br>rises from <i>paper.</i></h2><p>Scan the code on the back of your printed card. Place the card flat on a table, point your phone at its front, and watch three illustrated scenes unfold upright.</p><a class="primary-button" href="ar.html">Experience the card in AR <span aria-hidden="true">↗</span></a><div class="ar-directions"><span>Scan</span><i></i><span>Point</span><i></i><span>Discover</span></div></div></section>
   </main>
-  <footer><div class="footer-ornament">✦</div><p>We can’t wait to celebrate with you.</p><div class="footer-names">Vinayak <span>&amp;</span> Aambadi</div><small>11 February 2027 · Neyyattinkara, Kerala</small><a href="#top">Return to the beginning ↑</a></footer>
+  <footer class="closing"><div class="closing-glow" aria-hidden="true"></div><p>We look forward to celebrating with you.</p><div class="closing-names">Vinayak <span>&amp;</span> Aambadi</div><small>11 February 2027 · Neyyattinkara, Kerala</small><a href="#top">Back to the beginning ↑</a></footer>
 </body>
 </html>

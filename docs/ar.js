@@ -3,50 +3,65 @@ import {MindARThree} from 'mind-ar';
 import {createWeddingStage} from './ar-scene.js';
 
 const get = id => document.getElementById(id);
-const intro = get('intro');
 const status = get('status');
 const help = get('scanning-help');
 const found = get('found-note');
-const controls = get('scene-controls');
 const errorBox = get('error-box');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const messages = [
-  '✦ &nbsp; Your blessings, our joy &nbsp; ✦',
-  '✦ &nbsp; 11 February 2027 &nbsp; ✦',
-  '✦ &nbsp; Vinayak &amp; Aambadi &nbsp; ✦'
-];
+const sequence = [1, 0, 2];
 let session;
 let sculpture;
-let running = false;
-let selected = 1;
 let clock;
+let scanning = false;
+let targetVisible = false;
+let foundAt = -Infinity;
 let lostAt = -Infinity;
+let currentScene = 1;
 
 function setStatus(message) { status.textContent = message; }
+
 function showError(message) {
   get('error-message').textContent = message;
   errorBox.hidden = false;
+  help.hidden = true;
+  found.hidden = true;
+  document.body.classList.remove('is-found');
   setStatus('Camera unavailable');
 }
 
-function selectScene(index) {
-  selected = index;
-  controls.querySelectorAll('button[data-scene]').forEach(button => {
-    button.setAttribute('aria-pressed', String(Number(button.dataset.scene) === index));
-  });
-  found.innerHTML = messages[index];
-  if (sculpture && clock) sculpture.select(index, clock.getElapsedTime());
+function beginSequence(now) {
+  foundAt = now;
+  currentScene = sequence[0];
+  sculpture.reveal(now);
+  sculpture.select(currentScene, now);
+}
+
+function animate() {
+  const now = clock.getElapsedTime();
+  if (targetVisible) {
+    const phase = Math.max(0, now - foundAt - 4.7);
+    const step = now - foundAt < 4.7 ? 0 : 1 + Math.floor(phase / 5.2);
+    const next = sequence[step % sequence.length];
+    if (next !== currentScene) {
+      currentScene = next;
+      sculpture.select(next, now);
+    }
+  }
+  sculpture?.update(now);
+  session.renderer.render(session.scene, session.camera);
 }
 
 async function start() {
-  if (running || session) return;
+  if (session || document.hidden) return;
   errorBox.hidden = true;
+  help.hidden = false;
+  found.hidden = true;
+  setStatus('Opening camera…');
   if (!isSecureContext || !navigator.mediaDevices?.getUserMedia) {
-    showError('Open this page through HTTPS on your phone, then allow camera access.');
+    showError('Open this invitation through HTTPS, allow camera access, then reload the page.');
     return;
   }
-  get('start').disabled = true;
-  setStatus('Preparing your camera…');
+
   try {
     await document.fonts.ready;
     session = new MindARThree({
@@ -55,7 +70,7 @@ async function start() {
       uiLoading: 'no', uiScanning: 'no', uiError: 'no',
       filterMinCF: .0005, filterBeta: .01
     });
-    const {renderer, scene, camera} = session;
+    const {renderer, scene} = session;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
     scene.add(new THREE.AmbientLight(0xffe3b5, 1.6));
@@ -66,67 +81,58 @@ async function start() {
     const anchor = session.addAnchor(0);
     sculpture = await createWeddingStage(anchor.group, {reducedMotion});
     clock = new THREE.Clock();
-    renderer.setAnimationLoop(() => {
-      sculpture?.update(clock.getElapsedTime());
-      renderer.render(scene, camera);
-    });
+    renderer.setAnimationLoop(animate);
     anchor.onTargetFound = () => {
       const now = clock.getElapsedTime();
-      if (now - lostAt > 1.2 || !running) {
-        sculpture.reveal(now);
-        sculpture.select(selected, now);
-      }
-      setStatus('The card is alive');
-      help.hidden = true; found.hidden = false; controls.hidden = false;
+      if (now - lostAt > 1.2 || !scanning) beginSequence(now);
+      targetVisible = true;
+      document.body.classList.add('is-found');
+      setStatus('Invitation alive');
+      help.hidden = true;
+      found.hidden = false;
     };
     anchor.onTargetLost = () => {
       lostAt = clock.getElapsedTime();
-      setStatus('Searching for the card');
-      found.hidden = true; controls.hidden = true; help.hidden = false;
+      targetVisible = false;
+      document.body.classList.remove('is-found');
+      setStatus('Searching for the invitation');
+      found.hidden = true;
+      help.hidden = false;
     };
     await session.start();
-    running = true;
-    intro.hidden = true; help.hidden = false;
-    setStatus('Searching for the card');
+    scanning = true;
+    if (!targetVisible) setStatus('Searching for the invitation');
   } catch (error) {
-    console.error(error);
+    if (error) console.error(error);
     const denied = error?.name === 'NotAllowedError' || String(error).includes('Permission');
-    await stop(false);
+    await stop();
     showError(denied
-      ? 'Camera access was declined. Enable camera permission in your browser settings, then try again.'
-      : 'Please check your camera, connection, and browser settings, then try again.');
-  } finally { get('start').disabled = false; }
-}
-
-async function stop(showIntro = true) {
-  if (session) {
-    try {
-      session.renderer.setAnimationLoop(null);
-      await session.stop();
-    } catch (error) { console.warn(error); }
-    sculpture?.dispose();
-    sculpture = null;
-    session = null;
-    get('ar-container').replaceChildren();
-  }
-  running = false;
-  help.hidden = true; found.hidden = true; controls.hidden = true;
-  if (showIntro) {
-    intro.hidden = false;
-    errorBox.hidden = true;
-    setStatus('Ready to begin');
+      ? 'Camera access was declined. Allow camera access in your browser settings, then reload this page.'
+      : 'The camera could not start. Check the browser camera permission and your connection, then reload this page.');
   }
 }
 
-get('start').addEventListener('click', start);
-get('retry').addEventListener('click', start);
-get('stop').addEventListener('click', () => stop());
-get('replay').addEventListener('click', () => {
-  if (sculpture && clock) sculpture.reveal(clock.getElapsedTime());
-});
-controls.querySelectorAll('button[data-scene]').forEach(button => {
-  button.addEventListener('click', () => selectScene(Number(button.dataset.scene)));
-});
+async function stop() {
+  const wasScanning = scanning;
+  scanning = false;
+  targetVisible = false;
+  document.body.classList.remove('is-found');
+  if (!session) return;
+  const oldSession = session;
+  session = null;
+  try {
+    oldSession.renderer.setAnimationLoop(null);
+    if (wasScanning) await oldSession.stop();
+    else oldSession.renderer.dispose();
+  } catch (error) { console.warn(error); }
+  sculpture?.dispose();
+  sculpture = null;
+  get('ar-container').replaceChildren();
+}
+
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && running) stop();
+  if (document.hidden) stop();
+  else start();
 });
+window.addEventListener('pagehide', () => stop());
+start();

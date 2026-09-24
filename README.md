@@ -1,6 +1,6 @@
 # Vinayak & Aambadi wedding invitation
 
-Wedding invitation for 11 February 2027. The website lives in `docs/` and includes an image-tracked AR experience anchored to the printed card front.
+Wedding invitation for 11 February 2027. The standalone website lives in `docs/` with a layered, animated hero and editorial story and event sections. Its separate image-tracked AR page opens the camera immediately, anchors an upright 90° scene to the printed card, and cycles through the scenes automatically.
 
 - Planned invitation URL: `https://vinayak-mohan.github.io/vinayak-aambadi-invite/`
 - AR URL encoded in the card QR: `https://vinayak-mohan.github.io/vinayak-aambadi-invite/ar.html`

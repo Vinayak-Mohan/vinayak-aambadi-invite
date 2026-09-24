@@ -5,23 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#260711">
   <meta name="robots" content="noindex, nofollow">
-  <title>See the card come alive | Vinayak &amp; Aambadi</title>
+  <title>Wedding invitation in AR | Vinayak &amp; Aambadi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="ar.css"><link rel="stylesheet" href="ar-enhancements.css">
+  <link rel="stylesheet" href="ar.css">
   <script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/","mind-ar":"./vendor/mindar-image-three.prod.js"}}</script>
   <script type="module" src="ar.js"></script>
 </head>
 <body>
   <div id="ar-container" aria-hidden="true"></div>
-  <header class="ar-header"><a href="index.html" aria-label="Back to invitation">← <span>Invitation</span></a><div class="brand">V <span>✦</span> A</div><span class="ar-label">A living invitation</span></header>
+  <header class="ar-header"><div class="brand">V <span>✦</span> A</div><span class="ar-label">11 February 2027</span></header>
   <div class="camera-frame" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-  <div class="ar-status" role="status" aria-live="polite" id="status">Ready to begin</div>
-  <section class="ar-intro" id="intro" aria-labelledby="ar-title"><div class="intro-visual"><img src="assets/card-front.webp" alt="Illustrated printed wedding card front"><img class="intro-people" src="assets/illustrated-couple-standing.webp" alt=""></div><p class="eyebrow">An invitation that unfolds</p><h1 id="ar-title">Let the card<br><em>come alive.</em></h1><p class="description">Place the printed card flat on a table. Allow camera access, then view its front from a slight angle. Watch the ceremonial arch, Vinayak and Aambadi, and their invitation rise layer by layer from the card.</p><button id="start" type="button">Start the AR experience <span aria-hidden="true">↗</span></button><p class="privacy">Your camera stays on your device. No photo or video is uploaded.</p></section>
-  <div class="scanning-help" id="scanning-help" hidden><span class="scan-glyph">✣</span><p>Find the card on the table</p><small>Frame the whole front in even light, then lower your phone to see it stand</small><button id="stop" type="button">Close camera</button></div>
-  <div class="found-note" id="found-note" hidden>✦ &nbsp; Vinayak &amp; Aambadi &nbsp; ✦</div>
-  <div class="scene-controls" id="scene-controls" hidden aria-label="Choose an AR scene"><button type="button" data-scene="0" aria-pressed="false"><span>01</span> Blessings</button><button type="button" data-scene="1" aria-pressed="true"><span>02</span> The wedding</button><button type="button" data-scene="2" aria-pressed="false"><span>03</span> Together</button><button type="button" id="replay" aria-label="Replay the entrance animation" title="Replay entrance">↻</button></div>
-  <div class="error-box" id="error-box" role="alert" hidden><h2>Camera could not start</h2><p id="error-message"></p><button id="retry" type="button">Try again</button><a href="index.html">Return to invitation</a></div>
+  <div class="ar-status" role="status" aria-live="polite" id="status">Opening camera…</div>
+  <div class="scanning-help" id="scanning-help"><span class="scan-glyph" aria-hidden="true">✣</span><p>Find the invitation</p><small>Place the printed card flat on a table and frame its entire front</small></div>
+  <div class="found-note" id="found-note" hidden>Vinayak <span>&amp;</span> Aambadi</div>
+  <div class="error-box" id="error-box" role="alert" hidden><h1>Camera unavailable</h1><p id="error-message"></p></div>
 </body>
 </html>

@@ -30,6 +30,42 @@ if (gsap && ScrollTrigger) {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
     });
 
+    const cinema = document.querySelector('.cinema');
+    const cinemaVideo = document.querySelector('.cinema-video');
+    if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
+      const prepareCinema = () => {
+        if (cinemaVideo.dataset.loaded) return;
+        cinemaVideo.dataset.loaded = 'true';
+        cinemaVideo.preload = 'auto';
+        cinemaVideo.src = cinemaVideo.dataset.src;
+        cinemaVideo.load();
+      };
+      const preloader = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          prepareCinema();
+          preloader.disconnect();
+        }
+      }, {rootMargin: '700px 0px'});
+      preloader.observe(cinema);
+      cinemaVideo.addEventListener('loadedmetadata', () => {
+        const duration = cinemaVideo.duration;
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        cinemaVideo.pause();
+        ScrollTrigger.create({
+          trigger: cinema,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: true,
+          onUpdate: self => {
+            const time = Math.min(duration, Math.max(0, self.progress * duration));
+            if (Math.abs(cinemaVideo.currentTime - time) > .025) cinemaVideo.currentTime = time;
+            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
+          }
+        });
+        ScrollTrigger.refresh();
+      }, {once: true});
+    }
+
   });
 
   motion.add('(prefers-reduced-motion: no-preference) and (min-width: 701px) and (pointer: fine)', () => {

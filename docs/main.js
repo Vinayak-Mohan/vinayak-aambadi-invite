@@ -30,25 +30,25 @@ if (gsap && ScrollTrigger) {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
     });
 
-    const desktop = gsap.matchMedia();
-    desktop.add('(min-width: 701px) and (pointer: fine)', () => {
-      const hero = document.querySelector('.hero');
-      const backgroundX = gsap.quickTo('.hero-bg', 'x', {duration: .9, ease: 'power2.out'});
-      const backgroundY = gsap.quickTo('.hero-bg', 'y', {duration: .9, ease: 'power2.out'});
-      const figureX = gsap.quickTo('.hero-figure', 'x', {duration: .7, ease: 'power2.out'});
-      const figureY = gsap.quickTo('.hero-figure', 'y', {duration: .7, ease: 'power2.out'});
-      const move = event => {
-        const bounds = hero.getBoundingClientRect();
-        const x = (event.clientX - bounds.left) / bounds.width - .5;
-        const y = (event.clientY - bounds.top) / bounds.height - .5;
-        backgroundX(-x * 16); backgroundY(-y * 13);
-        figureX(x * 24); figureY(y * 13);
-      };
-      const reset = () => {backgroundX(0); backgroundY(0); figureX(0); figureY(0);};
-      hero.addEventListener('pointermove', move, {passive: true});
-      hero.addEventListener('pointerleave', reset);
-      return () => {hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerleave', reset);};
-    });
+  });
+
+  motion.add('(prefers-reduced-motion: no-preference) and (min-width: 701px) and (pointer: fine)', () => {
+    const hero = document.querySelector('.hero');
+    const backgroundX = gsap.quickTo('.hero-bg', 'x', {duration: .9, ease: 'power2.out'});
+    const backgroundY = gsap.quickTo('.hero-bg', 'y', {duration: .9, ease: 'power2.out'});
+    const figureX = gsap.quickTo('.hero-figure', 'x', {duration: .7, ease: 'power2.out'});
+    const figureY = gsap.quickTo('.hero-figure', 'y', {duration: .7, ease: 'power2.out'});
+    const move = event => {
+      const bounds = hero.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - .5;
+      const y = (event.clientY - bounds.top) / bounds.height - .5;
+      backgroundX(-x * 16); backgroundY(-y * 13);
+      figureX(x * 24); figureY(y * 13);
+    };
+    const reset = () => {backgroundX(0); backgroundY(0); figureX(0); figureY(0);};
+    hero.addEventListener('pointermove', move, {passive: true});
+    hero.addEventListener('pointerleave', reset);
+    return () => {hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerleave', reset);};
   });
 
   document.fonts.ready.then(() => ScrollTrigger.refresh());

@@ -1,0 +1,11 @@
+.intro-visual{position:relative;isolation:isolate}
+.intro-visual .intro-people{position:absolute;z-index:2;left:-52px;bottom:-13px;width:205px;max-width:none;height:190px;object-fit:contain;filter:drop-shadow(0 12px 12px #17050aaa)}
+.scene-controls{position:absolute;z-index:25;left:50%;bottom:calc(104px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:5px;padding:5px;border:1px solid #e5c58b90;border-radius:100px;background:#2a0b1be8;box-shadow:0 12px 28px #1301098c;white-space:nowrap}
+.scene-controls button{border:0;border-radius:100px;background:transparent;color:#efdcbb;padding:11px 14px;font-size:11px;transition:background .25s,color .25s}
+.scene-controls button span{margin-right:5px;color:#ddb876;font:400 12px 'Bodoni Moda',serif}
+.scene-controls button[aria-pressed="true"]{background:#e5c88d;color:#351324}.scene-controls button[aria-pressed="true"] span{color:#6e3240}
+.scene-controls #replay{border-left:1px solid #e5c58b55;border-radius:0 100px 100px 0;color:#e5c88d;font-size:18px;line-height:1;padding:7px 14px 9px}
+.scene-controls #replay:hover{background:#e5c88d27}
+.found-note{bottom:calc(41px + env(safe-area-inset-bottom))}
+@media(max-width:460px){.scene-controls{bottom:calc(98px + env(safe-area-inset-bottom))}.scene-controls button{padding:9px 8px;font-size:9px}.scene-controls button span{font-size:10px}.scene-controls #replay{padding:7px 10px;font-size:16px}}
+@media(prefers-reduced-motion:reduce){.scene-controls button{transition:none}}

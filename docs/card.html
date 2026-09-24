@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vinayak &amp; Aambadi — card front</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#240711}body{display:grid;place-items:center}
+    .card{position:relative;isolation:isolate;width:700px;height:1000px;overflow:hidden;color:#f3dfad;text-align:center;background:radial-gradient(circle at 50% 25%,#6f1d30 0%,#400b20 45%,#240711 100%);border:12px solid #8f6b32;box-shadow:inset 0 0 0 2px #ecd49a,inset 0 0 0 13px #331022}
+    .card:after{content:"";position:absolute;inset:28px;border:1px solid #b99a5f88;pointer-events:none}
+    .grain{position:absolute;inset:0;opacity:.24;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.23'/%3E%3C/svg%3E")}
+    .arch{position:absolute;inset:-19px -45px auto;width:calc(100% + 90px);height:auto;z-index:1}
+    .top{position:relative;z-index:2;margin-top:263px;font:500 14px/1.4 'DM Sans',sans-serif;letter-spacing:.35em;text-transform:uppercase}
+    .photo{position:relative;z-index:2;width:280px;height:285px;margin:7px auto 3px;filter:drop-shadow(0 13px 19px #1800078a)}
+    .photo img{width:100%;height:100%;object-fit:contain}
+    h1{position:relative;z-index:2;margin:10px 0 5px;font:400 62px/.95 'Bodoni Moda',serif;letter-spacing:-.055em;color:#fff5df;text-shadow:0 3px 16px #180008}
+    h1 span{display:block;font-size:36px;font-style:italic;line-height:1.2;color:#d7ae6a}
+    .sub{position:relative;z-index:2;margin:24px auto 0;font:500 14px/1.6 'DM Sans',sans-serif;letter-spacing:.22em;text-transform:uppercase}
+    .line{position:relative;z-index:2;width:180px;height:1px;margin:18px auto;background:linear-gradient(90deg,transparent,#d6b87b,transparent)}
+    .date{position:relative;z-index:2;font:500 34px/1.1 'Bodoni Moda',serif;color:#fff5df}
+    .place{position:relative;z-index:2;margin-top:10px;font:500 13px/1.5 'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase}
+    .bottom{position:absolute;z-index:2;bottom:46px;left:0;right:0;font:400 13px/1.5 'Bodoni Moda',serif;font-style:italic;letter-spacing:.07em}
+    @media(max-width:720px){.card{transform:scale(min(1,calc(100vw / 700)));transform-origin:center}}
+  </style>
+</head>
+<body>
+  <main class="card" aria-label="Wedding invitation card front">
+    <div class="grain"></div>
+    <img class="arch" src="assets/ceremonial-arch.webp" alt="">
+    <div class="top">Together with our families</div>
+    <div class="photo"><img src="assets/illustrated-couple-portrait.webp" alt="Illustrated Vinayak and Aambadi"></div>
+    <h1>Vinayak <span>&amp;</span> Aambadi</h1>
+    <div class="sub">Request the honour of your presence</div>
+    <div class="line"></div>
+    <div class="date">11 February 2027</div>
+    <div class="place">Sree Neelakeshi Kalyana Mandapam<br>Marayamuttom · Kerala</div>
+    <div class="bottom">A new chapter, with your blessings</div>
+  </main>
+</body>
+</html>

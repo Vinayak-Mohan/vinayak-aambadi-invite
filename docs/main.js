@@ -34,7 +34,7 @@ if (gsap && ScrollTrigger) {
     const cinemaVideo = document.querySelector('.cinema-video');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
       const isMobileCinema = matchMedia('(max-width:700px)').matches;
-      const cinemaSource = isMobileCinema ? cinemaVideo.dataset.mobileSrc : cinemaVideo.dataset.src;
+      const cinemaSource = (isMobileCinema && cinemaVideo.dataset.mobileSrc) || cinemaVideo.dataset.src;
       if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;
       let cinemaInitialised = false;
       const sourceFrameRate = 24;
@@ -46,34 +46,39 @@ if (gsap && ScrollTrigger) {
         cinemaInitialised = true;
         cinemaVideo.pause();
 
-        const playhead = {time: 0};
-        let displayedFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
-        let targetFrame = displayedFrame;
-        let renderRequest = 0;
+        const finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
+        let targetFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
+        let displayedFrame = targetFrame;
+        let seeking = false;
 
-        const renderNextFrame = () => {
-          renderRequest = 0;
-          if (displayedFrame === targetFrame) return;
-          displayedFrame += Math.sign(targetFrame - displayedFrame);
-          cinemaVideo.currentTime = Math.min(duration, displayedFrame / sourceFrameRate);
-          renderRequest = requestAnimationFrame(renderNextFrame);
+        const seekToTargetFrame = () => {
+          if (seeking || displayedFrame === targetFrame) return;
+          seeking = true;
+          cinemaVideo.currentTime = Math.min(duration - .001, targetFrame / sourceFrameRate);
         };
 
-        const queueFrame = time => {
-          targetFrame = Math.round(Math.min(duration, Math.max(0, time)) * sourceFrameRate);
-          if (!renderRequest) renderRequest = requestAnimationFrame(renderNextFrame);
+        const settleRenderedFrame = () => {
+          displayedFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
+          seeking = false;
+          seekToTargetFrame();
         };
 
-        gsap.to(playhead, {
-          time: duration,
-          ease: 'none',
-          onUpdate: () => queueFrame(playhead.time),
-          scrollTrigger: {
-            trigger: cinema,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: .38,
-            onUpdate: self => cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4))
+        const handleSeeked = () => requestAnimationFrame(settleRenderedFrame);
+
+        cinemaVideo.addEventListener('seeked', handleSeeked);
+        ScrollTrigger.create({
+          trigger: cinema,
+          start: 'top top',
+          end: 'bottom bottom',
+          onRefresh: self => {
+            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
+            targetFrame = Math.round(self.progress * finalFrame);
+            seekToTargetFrame();
+          },
+          onUpdate: self => {
+            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
+            targetFrame = Math.round(self.progress * finalFrame);
+            seekToTargetFrame();
           }
         });
         ScrollTrigger.refresh();

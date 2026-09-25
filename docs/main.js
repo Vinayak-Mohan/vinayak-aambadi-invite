@@ -23,8 +23,32 @@ if (gsap && ScrollTrigger) {
 
     gsap.from('.invitation-copy > *', {y: 34, opacity: 0, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: {trigger: '.invitation-copy', start: 'top 82%', once: true}});
     gsap.from('.invitation-art', {y: 70, opacity: 0, duration: 1.35, ease: 'power3.out', scrollTrigger: {trigger: '.invitation-art', start: 'top 88%', once: true}});
-    gsap.from('.story-copy > *', {y: 35, opacity: 0, duration: 1, stagger: .12, ease: 'power3.out', scrollTrigger: {trigger: '.story-copy', start: 'top 84%', once: true}});
-    gsap.from('.story-art img', {y: 80, opacity: 0, duration: 1.3, ease: 'power3.out', scrollTrigger: {trigger: '.story-art', start: 'top 86%', once: true}});
+    const story = document.querySelector('.story');
+    if (story) {
+      const storyEntrance = gsap.timeline({
+        defaults: {ease: 'power3.out'},
+        scrollTrigger: {trigger: story, start: 'top 74%', once: true}
+      });
+      storyEntrance
+        .from('.story-aura', {scale: .68, opacity: 0, duration: 1.25}, 0)
+        .from('.story-disc', {scale: .62, opacity: 0, duration: 1.15}, .04)
+        .from('.story-orbit', {scale: .48, rotation: -18, opacity: 0, duration: 1.35}, .1)
+        .from('.story-art img', {y: 78, scale: .92, opacity: 0, duration: 1.35}, .19)
+        .from('.story-spark', {scale: 0, opacity: 0, duration: .52, stagger: .1}, .52)
+        .from('.story-flower', {scale: .72, opacity: 0, duration: .55}, .22)
+        .from('.story-copy h2', {y: 52, opacity: 0, duration: 1.05}, .3)
+        .from('.story-copy > p:not(.story-signoff)', {y: 27, opacity: 0, duration: .72}, .57)
+        .from('.story-rule', {scaleX: 0, duration: .62, transformOrigin: 'left center'}, .69)
+        .from('.story-signoff', {y: 20, opacity: 0, duration: .7}, .79);
+
+      const storyScroll = {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true};
+      gsap.to('.story-aura', {yPercent: -9, xPercent: 3, ease: 'none', scrollTrigger: storyScroll});
+      gsap.to('.story-disc', {yPercent: -5, xPercent: -2, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-orbit', {yPercent: -14, xPercent: 4, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-spark', {yPercent: -21, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-art img', {yPercent: -6, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-copy', {yPercent: -3, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+    }
     gsap.from('.day-heading > *', {y: 32, opacity: 0, duration: .9, stagger: .11, ease: 'power3.out', scrollTrigger: {trigger: '.day-heading', start: 'top 82%', once: true}});
     gsap.utils.toArray('.event').forEach(event => {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});

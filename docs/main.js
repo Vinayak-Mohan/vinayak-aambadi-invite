@@ -33,6 +33,9 @@ if (gsap && ScrollTrigger) {
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
+      const isMobileCinema = matchMedia('(max-width:700px)').matches;
+      const cinemaSource = isMobileCinema ? cinemaVideo.dataset.mobileSrc : cinemaVideo.dataset.src;
+      if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;
       let cinemaInitialised = false;
       const sourceFrameRate = 24;
 
@@ -81,11 +84,11 @@ if (gsap && ScrollTrigger) {
         cinemaVideo.dataset.loaded = 'loading';
         cinemaVideo.preload = 'auto';
         try {
-          const response = await fetch(cinemaVideo.dataset.src, {cache: 'force-cache'});
+          const response = await fetch(cinemaSource, {cache: 'force-cache'});
           if (!response.ok) throw new Error('Could not preload the cinema video.');
           cinemaVideo.src = URL.createObjectURL(await response.blob());
         } catch {
-          cinemaVideo.src = cinemaVideo.dataset.src;
+          cinemaVideo.src = cinemaSource;
         }
         cinemaVideo.load();
         cinemaVideo.dataset.loaded = 'true';

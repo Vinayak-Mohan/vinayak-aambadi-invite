@@ -14,7 +14,7 @@
   <title>Vinayak &amp; Aambadi | Wedding invitation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600&family=Noto+Serif+Malayalam:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&family=Noto+Serif+Malayalam:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script defer src="vendor/gsap.min.js"></script>
   <script defer src="vendor/ScrollTrigger.min.js"></script>
@@ -32,7 +32,7 @@
       <div class="hero-world" aria-hidden="true">
         <div class="hero-bg-wrap"><img class="hero-bg" src="assets/kerala-courtyard-v2.webp" width="1672" height="941" alt="" fetchpriority="high"></div>
         <div class="hero-veil"></div><div class="hero-light"></div>
-        <div class="hero-arch"><img src="assets/ceremonial-arch.webp" width="1536" height="1024" alt=""></div>
+        <div class="hero-arch"><picture><source media="(max-width:700px)" srcset="assets/ceremonial-bouquet-mobile.webp" type="image/webp" width="941" height="1672"><img src="assets/ceremonial-arch.webp" width="1536" height="1024" alt=""></picture></div>
         <div class="hero-figure-wrap"><div class="hero-figure"><img src="assets/illustrated-couple-standing.webp" width="1024" height="1536" alt=""></div></div>
         <div class="hero-ground"></div>
         <span class="hero-petal petal-a"></span><span class="hero-petal petal-b"></span><span class="hero-petal petal-c"></span>
@@ -54,7 +54,7 @@
 
     <section class="cinema" id="cinema" aria-labelledby="cinema-title">
       <div class="cinema-stage">
-        <div class="cinema-film" aria-hidden="true"><video class="cinema-video" width="1920" height="1080" poster="assets/kerala-courtyard-v2.webp" data-src="assets/kerala-courtyard-interlude.mp4" muted playsinline preload="none"></video></div>
+        <div class="cinema-film" aria-hidden="true"><video class="cinema-video" width="1920" height="1080" poster="assets/kerala-courtyard-v2.webp" data-mobile-poster="assets/kerala-courtyard-mobile-poster.webp" data-src="assets/kerala-courtyard-interlude.mp4" data-mobile-src="assets/kerala-courtyard-interlude-mobile.mp4" muted playsinline preload="none"></video></div>
         <div class="cinema-copy"><p>As the lamps are lit</p><h2 id="cinema-title">The day holds<br>its breath.</h2><span aria-hidden="true">✦</span></div>
         <div class="cinema-progress" aria-hidden="true"></div>
       </div>

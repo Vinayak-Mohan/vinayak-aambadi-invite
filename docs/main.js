@@ -71,6 +71,7 @@ if (gsap && ScrollTrigger) {
         const duration = cinemaVideo.duration;
         if (!Number.isFinite(duration) || duration <= 0) return;
         cinemaInitialised = true;
+        cinema.dataset.ready = 'true';
         cinemaVideo.pause();
 
         const finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
@@ -165,6 +166,7 @@ if (gsap && ScrollTrigger) {
         }
       }, {rootMargin: '2400px 0px'});
       preloader.observe(cinema);
+      void prepareCinema();
     }
 
   });
@@ -252,8 +254,23 @@ if (gsap && ScrollTrigger) {
 
       chapterLocked = true;
       if (direction > 0 && window.scrollY < cinemaTop - 24) {
-        window.scrollTo({top: cinemaTop, behavior: 'smooth'});
-        cinemaStartTimer = window.setTimeout(run, 620);
+        const transitionStart = window.scrollY;
+        const transitionDistance = cinemaTop - transitionStart;
+        const transitionDuration = Math.min(760, Math.max(340, transitionDistance * .28));
+        const transitionedAt = performance.now();
+        root.classList.add('is-cinema-auto-scroll');
+        const enterCinema = now => {
+          const progress = Math.min(1, (now - transitionedAt) / transitionDuration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          window.scrollTo(0, transitionStart + transitionDistance * eased);
+          if (progress < 1) cinemaFrame = requestAnimationFrame(enterCinema);
+          else {
+            cinemaFrame = 0;
+            root.classList.remove('is-cinema-auto-scroll');
+            run();
+          }
+        };
+        cinemaFrame = requestAnimationFrame(enterCinema);
       } else run();
     };
     const moveChapter = direction => {

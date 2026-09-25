@@ -32,9 +32,12 @@ if (gsap && ScrollTrigger) {
 
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
+    const cinemaCanvas = document.querySelector('.cinema-canvas');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
       const isMobileCinema = matchMedia('(max-width:700px)').matches;
       const cinemaSource = (isMobileCinema && cinemaVideo.dataset.mobileSrc) || cinemaVideo.dataset.src;
+      const cinemaContext = cinemaCanvas?.getContext('2d', {alpha: false});
+      if (cinemaContext) cinema.classList.add('cinema-canvas-mode');
       if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;
       let cinemaInitialised = false;
       const sourceFrameRate = 24;
@@ -47,39 +50,70 @@ if (gsap && ScrollTrigger) {
         cinemaVideo.pause();
 
         const finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
+        const frameDuration = 1 / sourceFrameRate;
         let targetFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
-        let displayedFrame = targetFrame;
+        let displayedFrame = -1;
+        let activeFrame = targetFrame;
         let seeking = false;
+        let progressRaf = 0;
+        let latestProgress = 0;
+
+        const paintDecodedFrame = frame => {
+          if (cinemaContext && cinemaCanvas && cinemaVideo.videoWidth && cinemaVideo.videoHeight) {
+            if (cinemaCanvas.width !== cinemaVideo.videoWidth || cinemaCanvas.height !== cinemaVideo.videoHeight) {
+              cinemaCanvas.width = cinemaVideo.videoWidth;
+              cinemaCanvas.height = cinemaVideo.videoHeight;
+              cinemaContext.imageSmoothingEnabled = true;
+              cinemaContext.imageSmoothingQuality = 'high';
+            }
+            cinemaContext.drawImage(cinemaVideo, 0, 0, cinemaCanvas.width, cinemaCanvas.height);
+            cinemaCanvas.classList.add('is-ready');
+          }
+          displayedFrame = frame;
+        };
 
         const seekToTargetFrame = () => {
           if (seeking || displayedFrame === targetFrame) return;
           seeking = true;
-          cinemaVideo.currentTime = Math.min(duration - .001, targetFrame / sourceFrameRate);
+          activeFrame = targetFrame;
+          cinemaVideo.currentTime = Math.min(duration - frameDuration / 2, activeFrame * frameDuration);
         };
 
         const settleRenderedFrame = () => {
-          displayedFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
-          seeking = false;
+          let committed = false;
+          const commit = () => {
+            if (committed) return;
+            committed = true;
+            paintDecodedFrame(activeFrame);
+            seeking = false;
+            seekToTargetFrame();
+          };
+
+          if ('requestVideoFrameCallback' in cinemaVideo) cinemaVideo.requestVideoFrameCallback(commit);
+          requestAnimationFrame(() => requestAnimationFrame(commit));
+        };
+
+        const applyProgress = () => {
+          progressRaf = 0;
+          cinema.style.setProperty('--cinema-progress', latestProgress.toFixed(4));
+          targetFrame = Math.round(latestProgress * finalFrame);
           seekToTargetFrame();
         };
 
-        const handleSeeked = () => requestAnimationFrame(settleRenderedFrame);
+        const queueProgress = progress => {
+          latestProgress = progress;
+          if (!progressRaf) progressRaf = requestAnimationFrame(applyProgress);
+        };
 
-        cinemaVideo.addEventListener('seeked', handleSeeked);
+        cinemaVideo.addEventListener('seeked', settleRenderedFrame);
+        paintDecodedFrame(targetFrame);
         ScrollTrigger.create({
           trigger: cinema,
           start: 'top top',
           end: 'bottom bottom',
-          onRefresh: self => {
-            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
-            targetFrame = Math.round(self.progress * finalFrame);
-            seekToTargetFrame();
-          },
-          onUpdate: self => {
-            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
-            targetFrame = Math.round(self.progress * finalFrame);
-            seekToTargetFrame();
-          }
+          scrub: true,
+          onRefresh: self => queueProgress(self.progress),
+          onUpdate: self => queueProgress(self.progress)
         });
         ScrollTrigger.refresh();
       };
@@ -97,8 +131,8 @@ if (gsap && ScrollTrigger) {
         }
         cinemaVideo.load();
         cinemaVideo.dataset.loaded = 'true';
-        if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) initialiseCinema();
-        else cinemaVideo.addEventListener('canplaythrough', initialiseCinema, {once: true});
+        if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) initialiseCinema();
+        else cinemaVideo.addEventListener('loadeddata', initialiseCinema, {once: true});
       };
       const preloader = new IntersectionObserver(entries => {
         if (entries.some(entry => entry.isIntersecting)) {

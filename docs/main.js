@@ -163,14 +163,15 @@ if (gsap && ScrollTrigger) {
           void prepareCinema();
           preloader.disconnect();
         }
-      }, {rootMargin: '1100px 0px'});
+      }, {rootMargin: '2400px 0px'});
       preloader.observe(cinema);
     }
 
   });
 
-  motion.add('(prefers-reduced-motion: no-preference) and (min-width: 701px) and (pointer: fine)', () => {
+  motion.add('(prefers-reduced-motion: no-preference)', () => {
     const hero = document.querySelector('.hero');
+    const finePointer = matchMedia('(pointer: fine)').matches;
     const backgroundX = gsap.quickTo('.hero-bg', 'x', {duration: .9, ease: 'power2.out'});
     const backgroundY = gsap.quickTo('.hero-bg', 'y', {duration: .9, ease: 'power2.out'});
     const figureX = gsap.quickTo('.hero-figure', 'x', {duration: .7, ease: 'power2.out'});
@@ -183,8 +184,10 @@ if (gsap && ScrollTrigger) {
       figureX(x * 24); figureY(y * 13);
     };
     const reset = () => {backgroundX(0); backgroundY(0); figureX(0); figureY(0);};
-    hero.addEventListener('pointermove', move, {passive: true});
-    hero.addEventListener('pointerleave', reset);
+    if (finePointer) {
+      hero.addEventListener('pointermove', move, {passive: true});
+      hero.addEventListener('pointerleave', reset);
+    }
 
     const invitation = document.querySelector('.invitation');
     const cinema = document.querySelector('.cinema');
@@ -197,6 +200,9 @@ if (gsap && ScrollTrigger) {
     let cinemaFrame = 0;
     let cinemaStartTimer = 0;
     let releaseTimer = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchGesture = false;
 
     const topOf = element => element.getBoundingClientRect().top + window.scrollY;
     const releaseChapter = () => {
@@ -226,7 +232,8 @@ if (gsap && ScrollTrigger) {
       const end = direction > 0 ? cinemaEnd : cinemaTop;
       const distance = Math.abs(end - start);
       const fullDistance = Math.max(1, cinemaEnd - cinemaTop);
-      const duration = Math.max(850, 8000 * distance / fullDistance);
+      const videoDuration = cinema.querySelector('.cinema-video')?.duration || 8;
+      const duration = Math.max(1100, videoDuration * 1000 * distance / fullDistance);
       const run = () => {
         root.classList.add('is-cinema-auto-scroll');
         const startedAt = performance.now();
@@ -249,14 +256,8 @@ if (gsap && ScrollTrigger) {
         cinemaStartTimer = window.setTimeout(run, 620);
       } else run();
     };
-    const onWheel = event => {
-      if (Math.abs(event.deltaY) < 12 || event.ctrlKey || chapterTargets.some(target => !target)) return;
-      if (chapterLocked) {
-        event.preventDefault();
-        return;
-      }
-
-      const direction = Math.sign(event.deltaY);
+    const moveChapter = direction => {
+      if (chapterLocked || chapterTargets.some(target => !target)) return chapterLocked;
       const invitationTop = topOf(invitation);
       const cinemaTop = topOf(cinema);
       const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
@@ -305,15 +306,48 @@ if (gsap && ScrollTrigger) {
         }
       }
 
-      if (handled) event.preventDefault();
+      return handled;
+    };
+    const onWheel = event => {
+      if (Math.abs(event.deltaY) < 12 || event.ctrlKey) return;
+      if (moveChapter(Math.sign(event.deltaY))) event.preventDefault();
+    };
+    const onTouchStart = event => {
+      if (event.touches.length !== 1) return;
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      touchGesture = true;
+    };
+    const onTouchMove = event => {
+      if (!touchGesture || event.touches.length !== 1) return;
+      const deltaY = touchStartY - event.touches[0].clientY;
+      const deltaX = touchStartX - event.touches[0].clientX;
+      if (Math.abs(deltaY) > 8 && Math.abs(deltaY) > Math.abs(deltaX)) event.preventDefault();
+    };
+    const onTouchEnd = event => {
+      if (!touchGesture) return;
+      touchGesture = false;
+      const touch = event.changedTouches[0];
+      const deltaY = touchStartY - touch.clientY;
+      const deltaX = touchStartX - touch.clientX;
+      if (Math.abs(deltaY) < 34 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+      if (moveChapter(Math.sign(deltaY))) event.preventDefault();
     };
 
     root.classList.add('guided-chapters');
     window.addEventListener('wheel', onWheel, {passive: false});
+    window.addEventListener('touchstart', onTouchStart, {passive: true});
+    window.addEventListener('touchmove', onTouchMove, {passive: false});
+    window.addEventListener('touchend', onTouchEnd, {passive: false});
     return () => {
-      hero.removeEventListener('pointermove', move);
-      hero.removeEventListener('pointerleave', reset);
+      if (finePointer) {
+        hero.removeEventListener('pointermove', move);
+        hero.removeEventListener('pointerleave', reset);
+      }
       window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       stopCinemaTravel();
       clearTimeout(releaseTimer);
       root.classList.remove('guided-chapters');

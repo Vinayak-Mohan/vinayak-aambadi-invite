@@ -185,7 +185,139 @@ if (gsap && ScrollTrigger) {
     const reset = () => {backgroundX(0); backgroundY(0); figureX(0); figureY(0);};
     hero.addEventListener('pointermove', move, {passive: true});
     hero.addEventListener('pointerleave', reset);
-    return () => {hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerleave', reset);};
+
+    const invitation = document.querySelector('.invitation');
+    const cinema = document.querySelector('.cinema');
+    const story = document.querySelector('.story');
+    const celebration = document.querySelector('.celebration');
+    const closing = document.querySelector('.closing');
+    const chapterTargets = [hero, invitation, cinema, story, celebration, closing];
+    const root = document.documentElement;
+    let chapterLocked = false;
+    let cinemaFrame = 0;
+    let cinemaStartTimer = 0;
+    let releaseTimer = 0;
+
+    const topOf = element => element.getBoundingClientRect().top + window.scrollY;
+    const releaseChapter = () => {
+      chapterLocked = false;
+      clearTimeout(releaseTimer);
+    };
+    const lockForScroll = () => {
+      chapterLocked = true;
+      clearTimeout(releaseTimer);
+      releaseTimer = window.setTimeout(releaseChapter, 1100);
+      if ('onscrollend' in window) window.addEventListener('scrollend', releaseChapter, {once: true});
+    };
+    const scrollToPoint = point => {
+      lockForScroll();
+      window.scrollTo({top: point, behavior: 'smooth'});
+    };
+    const stopCinemaTravel = () => {
+      if (cinemaFrame) cancelAnimationFrame(cinemaFrame);
+      cinemaFrame = 0;
+      clearTimeout(cinemaStartTimer);
+      root.classList.remove('is-cinema-auto-scroll');
+    };
+    const travelCinema = direction => {
+      const cinemaTop = topOf(cinema);
+      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
+      const start = Math.max(cinemaTop, Math.min(window.scrollY, cinemaEnd));
+      const end = direction > 0 ? cinemaEnd : cinemaTop;
+      const distance = Math.abs(end - start);
+      const fullDistance = Math.max(1, cinemaEnd - cinemaTop);
+      const duration = Math.max(850, 8000 * distance / fullDistance);
+      const run = () => {
+        root.classList.add('is-cinema-auto-scroll');
+        const startedAt = performance.now();
+        const advance = now => {
+          const progress = Math.min(1, (now - startedAt) / duration);
+          window.scrollTo(0, start + (end - start) * progress);
+          if (progress < 1) cinemaFrame = requestAnimationFrame(advance);
+          else {
+            cinemaFrame = 0;
+            root.classList.remove('is-cinema-auto-scroll');
+            releaseChapter();
+          }
+        };
+        cinemaFrame = requestAnimationFrame(advance);
+      };
+
+      chapterLocked = true;
+      if (direction > 0 && window.scrollY < cinemaTop - 24) {
+        window.scrollTo({top: cinemaTop, behavior: 'smooth'});
+        cinemaStartTimer = window.setTimeout(run, 620);
+      } else run();
+    };
+    const onWheel = event => {
+      if (Math.abs(event.deltaY) < 12 || event.ctrlKey || chapterTargets.some(target => !target)) return;
+      if (chapterLocked) {
+        event.preventDefault();
+        return;
+      }
+
+      const direction = Math.sign(event.deltaY);
+      const invitationTop = topOf(invitation);
+      const cinemaTop = topOf(cinema);
+      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
+      const storyTop = topOf(story);
+      const celebrationTop = topOf(celebration);
+      const closingTop = topOf(closing);
+      const current = window.scrollY;
+      let handled = false;
+
+      if (direction > 0) {
+        if (current < invitationTop - 40) {
+          scrollToPoint(invitationTop);
+          handled = true;
+        } else if (current < cinemaEnd - 40) {
+          travelCinema(1);
+          handled = true;
+        } else if (current < storyTop - 40) {
+          scrollToPoint(storyTop);
+          handled = true;
+        } else if (current < celebrationTop - 40) {
+          scrollToPoint(celebrationTop);
+          handled = true;
+        } else if (current < closingTop - 40) {
+          scrollToPoint(closingTop);
+          handled = true;
+        }
+      } else if (direction < 0) {
+        if (current <= invitationTop + 40) {
+          scrollToPoint(topOf(hero));
+          handled = true;
+        } else if (current <= cinemaTop + 40) {
+          scrollToPoint(invitationTop);
+          handled = true;
+        } else if (current <= cinemaEnd + 40) {
+          travelCinema(-1);
+          handled = true;
+        } else if (current <= storyTop + 40) {
+          scrollToPoint(cinemaEnd);
+          handled = true;
+        } else if (current <= celebrationTop + 40) {
+          scrollToPoint(storyTop);
+          handled = true;
+        } else if (current <= closingTop + 40) {
+          scrollToPoint(celebrationTop);
+          handled = true;
+        }
+      }
+
+      if (handled) event.preventDefault();
+    };
+
+    root.classList.add('guided-chapters');
+    window.addEventListener('wheel', onWheel, {passive: false});
+    return () => {
+      hero.removeEventListener('pointermove', move);
+      hero.removeEventListener('pointerleave', reset);
+      window.removeEventListener('wheel', onWheel);
+      stopCinemaTravel();
+      clearTimeout(releaseTimer);
+      root.classList.remove('guided-chapters');
+    };
   });
 
   document.fonts.ready.then(() => ScrollTrigger.refresh());

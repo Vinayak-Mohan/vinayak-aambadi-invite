@@ -1,6 +1,7 @@
 :root{--plum:#230e1a;--wine:#401529;--gold:#d7b573;--gold-light:#f6dc9c;--ivory:#f4ebd9;--paper:#eee2ca;--ink:#382125;--green:#19271e;--display:'Bodoni Moda',Georgia,serif;--editorial:'Instrument Serif',Georgia,serif;--body:'DM Sans',Arial,sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+html.is-cinema-auto-scroll{scroll-behavior:auto}
 body{margin:0;min-width:320px;overflow-x:hidden;background:var(--plum);color:var(--ivory);font-family:var(--body);-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -127,6 +128,8 @@ a{color:inherit;text-decoration:none}
 .closing-names span{font-style:italic;color:#d6ad6e}
 .closing small{font-size:12px;letter-spacing:.05em;color:#dec8a5}
 .closing a{margin-top:55px;padding-bottom:8px;border-bottom:1px solid #d6b578;color:#edcf91;font-size:12px}
+
+@media(min-width:701px) and (pointer:fine){html.guided-chapters{scroll-snap-type:y proximity;scroll-padding-top:0}.guided-chapters .hero,.guided-chapters .invitation,.guided-chapters .story,.guided-chapters .celebration,.guided-chapters .closing{scroll-snap-align:start;scroll-snap-stop:always}.guided-chapters .cinema{scroll-snap-align:start}}
 
 @media(max-width:1050px){.hero-copy{left:6vw;width:62vw}.hero h1{font-size:11vw}.hero-figure-wrap{right:-4%;width:56vw}.invitation{grid-template-columns:1fr .8fr;padding-left:6vw;padding-right:6vw}.invitation-art{min-height:480px}.story-art{min-height:700px}.story{min-height:700px}.story-copy{padding-right:6vw}}
 @media(max-width:700px){.site-header{height:72px;padding:0 20px}.brand{font-size:29px}.site-header nav{gap:17px}.site-header nav a{font-size:11px}.site-header nav a:nth-child(2){display:none}.header-date{display:none}

@@ -33,37 +33,72 @@ if (gsap && ScrollTrigger) {
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
-      const prepareCinema = () => {
-        if (cinemaVideo.dataset.loaded) return;
-        cinemaVideo.dataset.loaded = 'true';
-        cinemaVideo.preload = 'auto';
-        cinemaVideo.src = cinemaVideo.dataset.src;
-        cinemaVideo.load();
-      };
-      const preloader = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
-          prepareCinema();
-          preloader.disconnect();
-        }
-      }, {rootMargin: '700px 0px'});
-      preloader.observe(cinema);
-      cinemaVideo.addEventListener('loadedmetadata', () => {
+      let cinemaInitialised = false;
+      const sourceFrameRate = 24;
+
+      const initialiseCinema = () => {
+        if (cinemaInitialised) return;
         const duration = cinemaVideo.duration;
         if (!Number.isFinite(duration) || duration <= 0) return;
+        cinemaInitialised = true;
         cinemaVideo.pause();
-        ScrollTrigger.create({
-          trigger: cinema,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-          onUpdate: self => {
-            const time = Math.min(duration, Math.max(0, self.progress * duration));
-            if (Math.abs(cinemaVideo.currentTime - time) > .025) cinemaVideo.currentTime = time;
-            cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4));
+
+        const playhead = {time: 0};
+        let displayedFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
+        let targetFrame = displayedFrame;
+        let renderRequest = 0;
+
+        const renderNextFrame = () => {
+          renderRequest = 0;
+          if (displayedFrame === targetFrame) return;
+          displayedFrame += Math.sign(targetFrame - displayedFrame);
+          cinemaVideo.currentTime = Math.min(duration, displayedFrame / sourceFrameRate);
+          renderRequest = requestAnimationFrame(renderNextFrame);
+        };
+
+        const queueFrame = time => {
+          targetFrame = Math.round(Math.min(duration, Math.max(0, time)) * sourceFrameRate);
+          if (!renderRequest) renderRequest = requestAnimationFrame(renderNextFrame);
+        };
+
+        gsap.to(playhead, {
+          time: duration,
+          ease: 'none',
+          onUpdate: () => queueFrame(playhead.time),
+          scrollTrigger: {
+            trigger: cinema,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: .38,
+            onUpdate: self => cinema.style.setProperty('--cinema-progress', self.progress.toFixed(4))
           }
         });
         ScrollTrigger.refresh();
-      }, {once: true});
+      };
+
+      const prepareCinema = async () => {
+        if (cinemaVideo.dataset.loaded) return;
+        cinemaVideo.dataset.loaded = 'loading';
+        cinemaVideo.preload = 'auto';
+        try {
+          const response = await fetch(cinemaVideo.dataset.src, {cache: 'force-cache'});
+          if (!response.ok) throw new Error('Could not preload the cinema video.');
+          cinemaVideo.src = URL.createObjectURL(await response.blob());
+        } catch {
+          cinemaVideo.src = cinemaVideo.dataset.src;
+        }
+        cinemaVideo.load();
+        cinemaVideo.dataset.loaded = 'true';
+        if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) initialiseCinema();
+        else cinemaVideo.addEventListener('canplaythrough', initialiseCinema, {once: true});
+      };
+      const preloader = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          void prepareCinema();
+          preloader.disconnect();
+        }
+      }, {rootMargin: '1100px 0px'});
+      preloader.observe(cinema);
     }
 
   });

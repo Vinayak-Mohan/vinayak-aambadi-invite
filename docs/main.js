@@ -117,7 +117,6 @@ if (gsap && ScrollTrigger) {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
     });
     gsap.to('.day-illumination', {yPercent: 55, ease: 'none', scrollTrigger: {trigger: '.celebration', start: 'top bottom', end: 'bottom top', scrub: true}});
-    gsap.to('.events-light', {scaleY: 1, ease: 'none', scrollTrigger: {trigger: '.events', start: 'top 78%', end: 'bottom 38%', scrub: true}});
     const closingEntrance = gsap.timeline({scrollTrigger: {trigger: '.closing', start: 'top 78%', once: true}});
     closingEntrance
       .from('.closing-glow', {scale: .7, opacity: 0, duration: 1.15, ease: 'power3.out'}, 0)

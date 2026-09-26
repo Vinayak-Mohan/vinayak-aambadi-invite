@@ -1,6 +1,37 @@
 const gsap = window.gsap;
 const ScrollTrigger = window.ScrollTrigger;
 
+document.querySelectorAll('[data-split]').forEach(element => {
+  const accessibleCopy = element.cloneNode(true);
+  accessibleCopy.querySelectorAll('br').forEach(lineBreak => lineBreak.replaceWith(' '));
+  const label = accessibleCopy.textContent.replace(/\s+/g, ' ').trim();
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  element.setAttribute('aria-label', label);
+  nodes.forEach(node => {
+    const fragment = document.createDocumentFragment();
+    node.nodeValue.split(/(\s+)/).forEach(token => {
+      if (!token) return;
+      if (/^\s+$/.test(token)) {
+        fragment.append(document.createTextNode(' '));
+        return;
+      }
+      const word = document.createElement('span');
+      word.className = 'split-word';
+      word.setAttribute('aria-hidden', 'true');
+      [...token].forEach(character => {
+        const letter = document.createElement('span');
+        letter.className = 'split-char';
+        letter.textContent = character;
+        word.append(letter);
+      });
+      fragment.append(word);
+    });
+    node.replaceWith(fragment);
+  });
+});
+
 if (gsap && ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -9,20 +40,67 @@ if (gsap && ScrollTrigger) {
     const entrance = gsap.timeline({defaults: {ease: 'power3.out'}});
     entrance
       .from('.hero-bg', {scale: 1.09, opacity: .55, duration: 2.1}, 0)
+      .from('.love-mark', {scale: .62, rotation: -14, opacity: 0, duration: 1.1}, .18)
       .from('.hero-arch', {y: -85, opacity: 0, duration: 1.55}, .25)
       .from('.hero-figure', {y: 110, opacity: 0, duration: 1.6}, .55)
       .from('.hero-malayalam, .hero-prelude', {y: 22, opacity: 0, stagger: .12, duration: .8}, .4)
       .from('.name-inner', {yPercent: 112, stagger: .17, duration: 1.05}, .58)
       .from('.hero-amp', {scale: .65, opacity: 0, duration: .8}, .9)
-      .from('.hero-details, .hero-cta, .hero-edge', {y: 22, opacity: 0, stagger: .13, duration: .8}, 1.25);
+      .from('.hero-details, .hero-edge', {y: 22, opacity: 0, stagger: .13, duration: .8}, 1.25);
+
+    gsap.to('.hero-bg', {scale: 1.035, xPercent: -1.1, duration: 8, delay: 2.05, repeat: -1, yoyo: true, ease: 'sine.inOut'});
+    gsap.to('.hero-arch img', {yPercent: 1.8, rotation: .35, transformOrigin: '50% 0%', duration: 6.7, repeat: -1, yoyo: true, ease: 'sine.inOut'});
+    gsap.to('.hero-figure img', {y: -7, rotation: -.28, transformOrigin: '50% 100%', duration: 4.8, repeat: -1, yoyo: true, ease: 'sine.inOut'});
+    gsap.to('.hero-light', {scale: 1.09, opacity: .72, duration: 5.4, repeat: -1, yoyo: true, ease: 'sine.inOut'});
+    gsap.to('.love-mark svg', {y: -3, rotation: 1.8, duration: 4.2, repeat: -1, yoyo: true, ease: 'sine.inOut'});
 
     gsap.to('.hero-bg-wrap', {yPercent: 13, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
     gsap.to('.hero-arch', {yPercent: 19, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
     gsap.to('.hero-figure-wrap', {yPercent: -10, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
     gsap.to('.hero-copy', {yPercent: -13, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
 
-    gsap.from('.invitation-copy > *', {y: 34, opacity: 0, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: {trigger: '.invitation-copy', start: 'top 82%', once: true}});
-    gsap.from('.invitation-art', {y: 70, opacity: 0, duration: 1.35, ease: 'power3.out', scrollTrigger: {trigger: '.invitation-art', start: 'top 88%', once: true}});
+    const invitation = document.querySelector('.invitation');
+    if (invitation) {
+      const invitationEntrance = gsap.timeline({
+        defaults: {ease: 'power3.out'},
+        scrollTrigger: {trigger: invitation, start: 'top 72%', once: true}
+      });
+      invitationEntrance
+        .from('.invitation-sun', {scale: .72, opacity: 0, duration: 1.35}, 0)
+        .from('.botanical-left', {x: -90, rotation: -30, opacity: 0, duration: 1.2}, .05)
+        .from('.botanical-right', {x: 90, rotation: 176, opacity: 0, duration: 1.2}, .08)
+        .from('.section-emblem span', {scaleX: 0, transformOrigin: 'center', duration: .55, stagger: .08}, .16)
+        .from('.section-emblem i, .script-note', {y: 18, opacity: 0, duration: .65, stagger: .1}, .2)
+        .from('.invitation-copy .split-char', {yPercent: 112, rotation: 4, opacity: 0, duration: .72, stagger: .018}, .28)
+        .from('.invitation-copy > p:not(.script-note)', {y: 28, opacity: 0, duration: .78}, .68)
+        .from('.invitation-signature', {y: 22, opacity: 0, duration: .72}, .82)
+        .from('.art-aura', {scale: .62, opacity: 0, duration: 1.15}, .15)
+        .from('.ring-outer', {scale: .55, rotation: -18, opacity: 0, duration: 1.25}, .2)
+        .from('.ring-inner', {scale: .45, rotation: 22, opacity: 0, duration: 1.2}, .3)
+        .from('.portrait-echo', {scale: .88, opacity: 0, duration: 1.05}, .36)
+        .from('.portrait-frame', {y: 76, scale: .94, opacity: 0, duration: 1.25}, .39)
+        .from('.portrait-jewel, .gold-dust', {scale: 0, opacity: 0, duration: .5, stagger: .08}, .8);
+
+      const invitationScroll = {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true};
+      gsap.to('.invitation-sun', {yPercent: -9, xPercent: -2, ease: 'none', scrollTrigger: invitationScroll});
+      gsap.to('.botanical-left', {yPercent: -13, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.botanical-right', {yPercent: 11, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.art-aura', {yPercent: -7, scale: 1.04, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.ring-outer', {yPercent: -10, rotation: 8, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.ring-inner', {yPercent: -5, rotation: -10, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.portrait-frame', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.gold-dust', {yPercent: -24, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.portrait-jewel', {scale: 1.18, opacity: .58, duration: 2.1, repeat: -1, yoyo: true, stagger: .45, ease: 'sine.inOut'});
+    }
+
+    const cinemaCopy = document.querySelector('.cinema-copy');
+    if (cinemaCopy) {
+      const cinemaEntrance = gsap.timeline({scrollTrigger: {trigger: cinemaCopy, start: 'top 82%', once: true}});
+      cinemaEntrance
+        .from('.cinema-copy p', {y: 22, opacity: 0, duration: .65, ease: 'power3.out'}, 0)
+        .from('.cinema-copy .split-char', {yPercent: 115, opacity: 0, rotation: 3, duration: .72, stagger: .017, ease: 'power3.out'}, .12)
+        .from('.cinema-copy > span', {scale: 0, rotation: -35, opacity: 0, duration: .55, ease: 'back.out(1.6)'}, .58);
+    }
     const story = document.querySelector('.story');
     if (story) {
       const storyEntrance = gsap.timeline({
@@ -36,7 +114,7 @@ if (gsap && ScrollTrigger) {
         .from('.story-art img', {y: 78, scale: .92, opacity: 0, duration: 1.35}, .19)
         .from('.story-spark', {scale: 0, opacity: 0, duration: .52, stagger: .1}, .52)
         .from('.story-flower', {scale: .72, opacity: 0, duration: .55}, .22)
-        .from('.story-copy h2', {y: 52, opacity: 0, duration: 1.05}, .3)
+        .from('.story-copy .split-char', {yPercent: 112, rotation: 3, opacity: 0, duration: .76, stagger: .018}, .3)
         .from('.story-copy > p:not(.story-signoff)', {y: 27, opacity: 0, duration: .72}, .57)
         .from('.story-rule', {scaleX: 0, duration: .62, transformOrigin: 'left center'}, .69)
         .from('.story-signoff', {y: 20, opacity: 0, duration: .7}, .79);
@@ -49,10 +127,20 @@ if (gsap && ScrollTrigger) {
       gsap.to('.story-art img', {yPercent: -6, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-copy', {yPercent: -3, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
     }
-    gsap.from('.day-heading > *', {y: 32, opacity: 0, duration: .9, stagger: .11, ease: 'power3.out', scrollTrigger: {trigger: '.day-heading', start: 'top 82%', once: true}});
+    const dayEntrance = gsap.timeline({scrollTrigger: {trigger: '.day-heading', start: 'top 82%', once: true}});
+    dayEntrance
+      .from('.day-heading > p', {y: 22, opacity: 0, duration: .65, ease: 'power3.out'}, 0)
+      .from('.day-heading .split-char', {yPercent: 112, rotation: 3, opacity: 0, duration: .72, stagger: .024, ease: 'power3.out'}, .12)
+      .from('.day-line', {scaleX: 0, transformOrigin: 'left center', duration: .85, ease: 'power3.out'}, .58);
     gsap.utils.toArray('.event').forEach(event => {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
     });
+    const closingEntrance = gsap.timeline({scrollTrigger: {trigger: '.closing', start: 'top 78%', once: true}});
+    closingEntrance
+      .from('.closing-glow', {scale: .7, opacity: 0, duration: 1.15, ease: 'power3.out'}, 0)
+      .from('.closing > p', {y: 20, opacity: 0, duration: .65, ease: 'power3.out'}, .08)
+      .from('.closing .split-char', {yPercent: 112, opacity: 0, duration: .72, stagger: .018, ease: 'power3.out'}, .18)
+      .from('.closing small, .closing a', {y: 18, opacity: 0, duration: .62, stagger: .12, ease: 'power3.out'}, .58);
 
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
@@ -126,8 +214,8 @@ if (gsap && ScrollTrigger) {
 
   motion.add('(prefers-reduced-motion: no-preference) and (pointer: fine)', () => {
     const hero = document.querySelector('.hero');
-    const backgroundX = gsap.quickTo('.hero-bg', 'x', {duration: .9, ease: 'power2.out'});
-    const backgroundY = gsap.quickTo('.hero-bg', 'y', {duration: .9, ease: 'power2.out'});
+    const backgroundX = gsap.quickTo('.hero-bg-drift', 'x', {duration: .9, ease: 'power2.out'});
+    const backgroundY = gsap.quickTo('.hero-bg-drift', 'y', {duration: .9, ease: 'power2.out'});
     const figureX = gsap.quickTo('.hero-figure', 'x', {duration: .7, ease: 'power2.out'});
     const figureY = gsap.quickTo('.hero-figure', 'y', {duration: .7, ease: 'power2.out'});
     const move = event => {

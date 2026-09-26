@@ -32,6 +32,14 @@ document.querySelectorAll('[data-split]').forEach(element => {
   });
 });
 
+const swingSection = document.querySelector('.story');
+if (swingSection && 'IntersectionObserver' in window) {
+  const swingVisibility = new IntersectionObserver(([entry]) => {
+    swingSection.classList.toggle('is-active', entry.isIntersecting);
+  }, {rootMargin: '10% 0px'});
+  swingVisibility.observe(swingSection);
+} else if (swingSection) swingSection.classList.add('is-active');
+
 if (gsap && ScrollTrigger) {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -56,8 +64,14 @@ if (gsap && ScrollTrigger) {
 
     gsap.to('.hero-bg-wrap', {yPercent: 13, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
     gsap.to('.hero-arch', {yPercent: 19, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
-    gsap.to('.hero-figure-wrap', {yPercent: -10, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
-    gsap.to('.hero-copy', {yPercent: -13, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
+    gsap.to('.hero-figure-wrap', {
+      yPercent: () => matchMedia('(max-width:700px)').matches ? 74 : 34,
+      xPercent: () => matchMedia('(max-width:700px)').matches ? -8 : -5,
+      scale: () => matchMedia('(max-width:700px)').matches ? 1.18 : 1.1,
+      transformOrigin: '50% 100%', ease: 'none',
+      scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true}
+    });
+    gsap.to('.hero-copy', {yPercent: -29, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
 
     const invitation = document.querySelector('.invitation');
     if (invitation) {
@@ -67,17 +81,28 @@ if (gsap && ScrollTrigger) {
       });
       invitationEntrance
         .from('.invitation-backdrop', {scale: 1.08, opacity: .45, duration: 1.5}, 0)
+        .from('.invitation-haze', {y: 38, opacity: 0, duration: 1.2}, .12)
         .from('.section-emblem span', {scaleX: 0, transformOrigin: 'center', duration: .55, stagger: .08}, .16)
         .from('.section-emblem i, .script-note', {y: 18, opacity: 0, duration: .65, stagger: .1}, .2)
         .from('.invitation-copy h2', {clipPath: 'inset(0 100% 0 0)', opacity: .3, duration: 1.08, ease: 'power2.inOut'}, .28)
         .from('.invitation-copy > p:not(.script-note)', {y: 28, opacity: 0, duration: .78}, .68)
         .from('.invitation-signature', {y: 22, opacity: 0, duration: .72}, .82)
         .from('.invitation-glow', {scale: .65, opacity: 0, duration: 1.1}, .2)
-        .from('.invitation-portrait', {y: 65, scale: .96, opacity: 0, duration: 1.35}, .36);
+        .from('.invitation-portrait', {y: 65, scale: .96, opacity: 0, duration: 1.35}, .36)
+        .from('.invitation-embers i', {scale: .25, opacity: 0, duration: .8, stagger: .15}, .4);
 
-      gsap.to('.invitation-backdrop', {yPercent: -5, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.invitation-portrait', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      const invitationScroll = {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true};
+      gsap.to('.invitation-backdrop', {yPercent: -3, ease: 'none', scrollTrigger: invitationScroll});
+      gsap.to('.invitation-haze', {yPercent: -10, xPercent: 4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.invitation-glow', {yPercent: -13, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.invitation-art', {scale: () => matchMedia('(max-width:700px)').matches ? 1.025 : 1.045, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true}});
+      gsap.to('.invitation-portrait', {yPercent: -8, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.invitation-copy', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.utils.toArray('.invitation-embers i').forEach((ember, index) => {
+        gsap.to(ember, {y: [-48, 30, -66][index], x: [20, -14, 9][index], ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      });
       gsap.fromTo('.invitation-light', {xPercent: -32, opacity: .14}, {xPercent: 30, opacity: .6, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.invitation-copy, .invitation-art, .invitation-embers', {opacity: 0, ease: 'none', scrollTrigger: {trigger: invitation, start: 'bottom 42%', end: 'bottom top', scrub: true}});
     }
 
     const story = document.querySelector('.story');

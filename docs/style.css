@@ -211,3 +211,59 @@ a{color:inherit;text-decoration:none}
  .story-art{height:clamp(280px,46dvh,340px)}
 }
 @media(prefers-reduced-motion:reduce){.invitation-backdrop,.invitation-portrait{transform:none!important;opacity:1!important}}
+
+/* Colour passes through each boundary before the next scene takes over. */
+.hero-ground{height:23%;background:linear-gradient(0deg,#1b0b17 0%,#1a0b17c9 29%,transparent 100%)}
+.invitation:after{display:block;content:"";position:absolute;z-index:3;inset:auto 0 0;height:clamp(70px,13dvh,150px);background:linear-gradient(180deg,transparent,#160b12);opacity:.85;mix-blend-mode:normal;pointer-events:none}
+.cinema-stage:before{content:"";position:absolute;z-index:1;inset:0 0 auto;height:clamp(70px,12dvh,145px);background:linear-gradient(180deg,#160b12ca,transparent);pointer-events:none}
+.cinema-transition{position:absolute;z-index:1;inset:0;background:linear-gradient(180deg,#15251dd9,#14251cf5);opacity:var(--cinema-exit,0);pointer-events:none}
+.cinema-copy,.cinema-progress{opacity:calc(1 - var(--cinema-exit,0))}
+
+/* A Kerala garden is the deep plane; haze, leaves, light and the couple move independently. */
+.story{background:#14251c;isolation:isolate}
+.story-world{position:absolute;z-index:0;inset:0;overflow:clip;pointer-events:none}
+.story-world>div{position:absolute;inset:0;pointer-events:none}
+.story-world>.story-landscape{inset:-5%;background:url('assets/story-garden-twilight.png') 42% center/cover no-repeat;filter:saturate(.82) brightness(.72);will-change:transform}
+.story-mist{background:radial-gradient(ellipse 45% 38% at 22% 58%,#d0bd7945,transparent 78%),linear-gradient(90deg,#10241926 0%,#102419b0 73%,#102419ba 100%)}
+.story-canopy{background:radial-gradient(ellipse 18% 26% at 0% 12%,#07180e9e 0 66%,transparent 70%),radial-gradient(ellipse 24% 18% at 93% 0%,#09190fa8 0 66%,transparent 70%),radial-gradient(ellipse 17% 22% at 97% 87%,#0a1b12ac 0 64%,transparent 69%);opacity:.8}
+.story-light{background:radial-gradient(ellipse 32% 36% at 26% 55%,#e8c27130,transparent 73%);mix-blend-mode:screen}
+.story:before{content:"";position:absolute;z-index:1;inset:0 0 auto;height:clamp(110px,19dvh,220px);background:linear-gradient(180deg,#14251c 0%,#14251c8c 50%,transparent 100%);pointer-events:none}
+.story:after{content:"";position:absolute;z-index:3;inset:auto 0 0;height:clamp(80px,13dvh,160px);background:linear-gradient(0deg,#14251c 0%,transparent 100%);pointer-events:none}
+.story-art{z-index:2}
+.story-art:before{display:none}
+.story-aura{top:16%;left:9%;width:82%;height:72%;aspect-ratio:auto;border-radius:50%;background:radial-gradient(ellipse,#e4bd7752 0%,#d6ac5740 32%,transparent 71%);filter:blur(25px)}
+.story-copy{z-index:4;text-shadow:0 3px 18px #07140dd1}
+.story-copy>p:not(.story-signoff){color:#f0e8d6}
+
+.celebration{position:relative;isolation:isolate;background:#f5ebd9;padding-top:clamp(175px,13vw,230px);padding-bottom:clamp(175px,13vw,230px)}
+.celebration:before,.celebration:after{content:"";position:absolute;z-index:-1;inset:0 0 auto;height:clamp(145px,23dvh,250px);pointer-events:none}
+.celebration:before{background:linear-gradient(180deg,#14251c 0%,#405843 20%,#c7cbb3 62%,#f5ebd9 100%)}
+.celebration:after{top:auto;bottom:0;background:linear-gradient(0deg,#26101e 0%,#866e6c 30%,#e8ddca 72%,#f5ebd9 100%)}
+.day-heading h2{overflow:visible}
+.day-heading .split-word{overflow:visible;padding-inline:.025em}
+.day-heading h2 i{white-space:nowrap;font-family:var(--display);font-weight:400;letter-spacing:-.065em}
+.event>div{min-width:0}
+.event h3{overflow:visible;overflow-wrap:normal}
+.closing{min-height:100dvh;min-height:100svh;min-height:100dvh;padding-block:clamp(85px,11dvh,145px);background:linear-gradient(180deg,#26101e,#331624 28%,#26101e 100%)}
+
+@media(max-width:700px){
+ .invitation:after{height:80px;opacity:.64}
+ .cinema-stage:before{height:85px}
+ .story-landscape{background-position:34% center;filter:saturate(.76) brightness(.59)}
+ .story-mist{background:linear-gradient(180deg,#0c1b13e3 0%,#11251ad6 32%,#12271c72 62%,#12251bb8 100%),radial-gradient(ellipse at 53% 78%,#dbb7703d,transparent 57%)}
+ .story-canopy{opacity:.42}
+ .story-light{background:radial-gradient(ellipse 58% 33% at 54% 77%,#d7ae6940,transparent 79%)}
+ .story-aura{top:10%;left:8%;width:84%;height:81%;filter:blur(22px)}
+ .story:before{height:100px}
+ .story:after{height:78px}
+ .celebration{padding-top:clamp(143px,18dvh,190px);padding-bottom:clamp(135px,17dvh,175px)}
+ .celebration:before{height:clamp(135px,18dvh,185px)}
+ .celebration:after{height:clamp(115px,16dvh,170px)}
+ .day-heading h2{gap:clamp(12px,4vw,24px)}
+ .day-heading h2>span:last-child{min-width:0}
+ .day-heading h2 i{font-size:.72em;line-height:1.15}
+ .event h3{font-size:clamp(2.2rem,10.5vw,2.65rem);line-height:1.1}
+ .closing{padding-inline:26px;min-height:100dvh}
+}
+@media(max-width:350px){.day-heading h2{font-size:clamp(75px,24vw,90px)}.day-heading h2>span:last-child{font-size:clamp(42px,13.5vw,50px)}.day-heading h2 i{font-size:.7em}.event{grid-template-columns:minmax(0,1fr) 24px}.event h3{font-size:2.25rem}}
+@media(prefers-reduced-motion:reduce){.story-world>div{transform:none!important;opacity:1!important}.cinema-transition{opacity:0}.cinema-copy,.cinema-progress{opacity:1}}

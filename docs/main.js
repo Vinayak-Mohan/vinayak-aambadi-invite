@@ -94,11 +94,11 @@ if (gsap && ScrollTrigger) {
         scrollTrigger: {trigger: story, start: 'top 74%', once: true}
       });
       storyEntrance
+        .from('.story-landscape', {scale: 1.055, opacity: .7, duration: 1.2}, 0)
+        .from('.story-mist, .story-light', {opacity: 0, duration: 1.1, stagger: .12}, .05)
+        .from('.story-canopy', {opacity: 0, duration: 1.2}, .1)
         .from('.story-aura', {scale: .68, opacity: 0, duration: 1.25}, 0)
-        .from('.story-disc', {scale: .62, opacity: 0, duration: 1.15}, .04)
-        .from('.story-orbit', {scale: .48, rotation: -18, opacity: 0, duration: 1.35}, .1)
         .from('.story-art img', {y: 78, scale: .92, opacity: 0, duration: 1.35}, .19)
-        .from('.story-spark', {scale: 0, opacity: 0, duration: .52, stagger: .1}, .52)
         .from('.story-flower', {scale: .72, opacity: 0, duration: .55}, .22)
         .from('.story-copy .split-char', {yPercent: 112, rotation: 3, opacity: 0, duration: .76, stagger: .018}, .3)
         .from('.story-copy > p:not(.story-signoff)', {y: 27, opacity: 0, duration: .72}, .57)
@@ -106,17 +106,18 @@ if (gsap && ScrollTrigger) {
         .from('.story-signoff', {y: 20, opacity: 0, duration: .7}, .79);
 
       const storyScroll = {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true};
+      gsap.to('.story-landscape', {yPercent: -4, ease: 'none', scrollTrigger: storyScroll});
+      gsap.to('.story-mist', {yPercent: -8, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-canopy', {yPercent: 7, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-light', {yPercent: -12, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-aura', {yPercent: -9, xPercent: 3, ease: 'none', scrollTrigger: storyScroll});
-      gsap.to('.story-disc', {yPercent: -5, xPercent: -2, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.story-orbit', {yPercent: -14, xPercent: 4, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.story-spark', {yPercent: -21, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-art img', {yPercent: -6, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-copy', {yPercent: -3, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
     }
     const dayEntrance = gsap.timeline({scrollTrigger: {trigger: '.day-heading', start: 'top 82%', once: true}});
     dayEntrance
       .from('.day-heading > p', {y: 22, opacity: 0, duration: .65, ease: 'power3.out'}, 0)
-      .from('.day-heading .split-char', {yPercent: 112, rotation: 3, opacity: 0, duration: .72, stagger: .024, ease: 'power3.out'}, .12)
+      .from('.day-heading h2 > span', {y: 24, opacity: 0, duration: .76, stagger: .12, ease: 'power3.out'}, .12)
       .from('.day-line', {scaleX: 0, transformOrigin: 'left center', duration: .85, ease: 'power3.out'}, .58);
     gsap.utils.toArray('.event').forEach(event => {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
@@ -131,6 +132,8 @@ if (gsap && ScrollTrigger) {
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
+      const updateCinemaExit = progress => cinema.style.setProperty('--cinema-exit', Math.min(1, Math.max(0, (progress - .82) / .18)).toFixed(4));
+      ScrollTrigger.create({trigger: cinema, start: 'top top', end: 'bottom bottom', onRefresh: self => updateCinemaExit(self.progress), onUpdate: self => updateCinemaExit(self.progress)});
       const isMobileCinema = matchMedia('(max-width:700px)').matches;
       const cinemaSource = (isMobileCinema && cinemaVideo.dataset.mobileSrc) || cinemaVideo.dataset.src;
       if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;

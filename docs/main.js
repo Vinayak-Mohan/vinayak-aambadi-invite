@@ -56,12 +56,9 @@ if (gsap && ScrollTrigger) {
 
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
-    const cinemaCanvas = document.querySelector('.cinema-canvas');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
       const isMobileCinema = matchMedia('(max-width:700px)').matches;
       const cinemaSource = (isMobileCinema && cinemaVideo.dataset.mobileSrc) || cinemaVideo.dataset.src;
-      const cinemaContext = cinemaCanvas?.getContext('2d', {alpha: false});
-      if (cinemaContext) cinema.classList.add('cinema-canvas-mode');
       if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;
       let cinemaInitialised = false;
       const sourceFrameRate = 24;
@@ -72,50 +69,27 @@ if (gsap && ScrollTrigger) {
         if (!Number.isFinite(duration) || duration <= 0) return;
         cinemaInitialised = true;
         cinema.dataset.ready = 'true';
+        cinema.classList.add('is-ready');
         cinemaVideo.pause();
 
         const finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
         const frameDuration = 1 / sourceFrameRate;
         let targetFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
         let displayedFrame = -1;
-        let activeFrame = targetFrame;
         let seeking = false;
         let progressRaf = 0;
         let latestProgress = 0;
 
-        const paintDecodedFrame = frame => {
-          if (cinemaContext && cinemaCanvas && cinemaVideo.videoWidth && cinemaVideo.videoHeight) {
-            if (cinemaCanvas.width !== cinemaVideo.videoWidth || cinemaCanvas.height !== cinemaVideo.videoHeight) {
-              cinemaCanvas.width = cinemaVideo.videoWidth;
-              cinemaCanvas.height = cinemaVideo.videoHeight;
-              cinemaContext.imageSmoothingEnabled = true;
-              cinemaContext.imageSmoothingQuality = 'high';
-            }
-            cinemaContext.drawImage(cinemaVideo, 0, 0, cinemaCanvas.width, cinemaCanvas.height);
-            cinemaCanvas.classList.add('is-ready');
-          }
-          displayedFrame = frame;
-        };
-
         const seekToTargetFrame = () => {
           if (seeking || displayedFrame === targetFrame) return;
           seeking = true;
-          activeFrame = targetFrame;
-          cinemaVideo.currentTime = Math.min(duration - frameDuration / 2, activeFrame * frameDuration);
-        };
-
-        const settleRenderedFrame = () => {
-          let committed = false;
-          const commit = () => {
-            if (committed) return;
-            committed = true;
-            paintDecodedFrame(activeFrame);
+          const requestedFrame = targetFrame;
+          cinemaVideo.currentTime = Math.min(duration - frameDuration / 2, requestedFrame * frameDuration);
+          cinemaVideo.addEventListener('seeked', () => {
+            displayedFrame = requestedFrame;
             seeking = false;
             seekToTargetFrame();
-          };
-
-          if ('requestVideoFrameCallback' in cinemaVideo) cinemaVideo.requestVideoFrameCallback(commit);
-          requestAnimationFrame(() => requestAnimationFrame(commit));
+          }, {once: true});
         };
 
         const applyProgress = () => {
@@ -130,8 +104,7 @@ if (gsap && ScrollTrigger) {
           if (!progressRaf) progressRaf = requestAnimationFrame(applyProgress);
         };
 
-        cinemaVideo.addEventListener('seeked', settleRenderedFrame);
-        paintDecodedFrame(targetFrame);
+        displayedFrame = targetFrame;
         ScrollTrigger.create({
           trigger: cinema,
           start: 'top top',
@@ -143,30 +116,10 @@ if (gsap && ScrollTrigger) {
         ScrollTrigger.refresh();
       };
 
-      const prepareCinema = async () => {
-        if (cinemaVideo.dataset.loaded) return;
-        cinemaVideo.dataset.loaded = 'loading';
-        cinemaVideo.preload = 'auto';
-        try {
-          const response = await fetch(cinemaSource, {cache: 'force-cache'});
-          if (!response.ok) throw new Error('Could not preload the cinema video.');
-          cinemaVideo.src = URL.createObjectURL(await response.blob());
-        } catch {
-          cinemaVideo.src = cinemaSource;
-        }
-        cinemaVideo.load();
-        cinemaVideo.dataset.loaded = 'true';
-        if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) initialiseCinema();
-        else cinemaVideo.addEventListener('loadeddata', initialiseCinema, {once: true});
-      };
-      const preloader = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
-          void prepareCinema();
-          preloader.disconnect();
-        }
-      }, {rootMargin: '2400px 0px'});
-      preloader.observe(cinema);
-      void prepareCinema();
+      cinemaVideo.src = cinemaSource;
+      cinemaVideo.load();
+      if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) initialiseCinema();
+      else cinemaVideo.addEventListener('loadeddata', initialiseCinema, {once: true});
     }
 
   });
@@ -196,11 +149,11 @@ if (gsap && ScrollTrigger) {
     const story = document.querySelector('.story');
     const celebration = document.querySelector('.celebration');
     const closing = document.querySelector('.closing');
-    const chapterTargets = [hero, invitation, cinema, story, celebration, closing];
+    const events = [...document.querySelectorAll('.event')];
+    const chapterTargets = [hero, invitation, cinema, story, celebration, closing, ...events];
     const root = document.documentElement;
     let chapterLocked = false;
     let cinemaFrame = 0;
-    let cinemaStartTimer = 0;
     let releaseTimer = 0;
     let touchStartX = 0;
     let touchStartY = 0;
@@ -224,7 +177,6 @@ if (gsap && ScrollTrigger) {
     const stopCinemaTravel = () => {
       if (cinemaFrame) cancelAnimationFrame(cinemaFrame);
       cinemaFrame = 0;
-      clearTimeout(cinemaStartTimer);
       root.classList.remove('is-cinema-auto-scroll');
     };
     const travelCinema = direction => {
@@ -281,6 +233,7 @@ if (gsap && ScrollTrigger) {
       const storyTop = topOf(story);
       const celebrationTop = topOf(celebration);
       const closingTop = topOf(closing);
+      const eventStops = events.map(event => Math.max(0, topOf(event) - Math.max(24, (window.innerHeight - event.offsetHeight) / 2)));
       const current = window.scrollY;
       let handled = false;
 
@@ -297,9 +250,10 @@ if (gsap && ScrollTrigger) {
         } else if (current < celebrationTop - 40) {
           scrollToPoint(celebrationTop);
           handled = true;
-        } else if (current < closingTop - 40) {
-          scrollToPoint(closingTop);
-          handled = true;
+        } else {
+          const nextStop = [...eventStops, closingTop].find(stop => stop > current + 40);
+          if (nextStop !== undefined) scrollToPoint(nextStop);
+          handled = nextStop !== undefined;
         }
       } else if (direction < 0) {
         if (current <= invitationTop + 40) {
@@ -317,9 +271,10 @@ if (gsap && ScrollTrigger) {
         } else if (current <= celebrationTop + 40) {
           scrollToPoint(storyTop);
           handled = true;
-        } else if (current <= closingTop + 40) {
-          scrollToPoint(celebrationTop);
-          handled = true;
+        } else {
+          const previousStop = [celebrationTop, ...eventStops].filter(stop => stop < current - 40).at(-1);
+          if (previousStop !== undefined) scrollToPoint(previousStop);
+          handled = previousStop !== undefined;
         }
       }
 
@@ -331,15 +286,13 @@ if (gsap && ScrollTrigger) {
     };
     const onTouchStart = event => {
       if (event.touches.length !== 1) return;
+      if (cinemaFrame) {
+        stopCinemaTravel();
+        releaseChapter();
+      }
       touchStartX = event.touches[0].clientX;
       touchStartY = event.touches[0].clientY;
       touchGesture = true;
-    };
-    const onTouchMove = event => {
-      if (!touchGesture || event.touches.length !== 1) return;
-      const deltaY = touchStartY - event.touches[0].clientY;
-      const deltaX = touchStartX - event.touches[0].clientX;
-      if (Math.abs(deltaY) > 8 && Math.abs(deltaY) > Math.abs(deltaX)) event.preventDefault();
     };
     const onTouchEnd = event => {
       if (!touchGesture) return;
@@ -348,14 +301,17 @@ if (gsap && ScrollTrigger) {
       const deltaY = touchStartY - touch.clientY;
       const deltaX = touchStartX - touch.clientX;
       if (Math.abs(deltaY) < 34 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
-      if (moveChapter(Math.sign(deltaY))) event.preventDefault();
+      const cinemaTop = topOf(cinema);
+      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
+      const current = window.scrollY;
+      if (deltaY > 0 && current >= cinemaTop - 80 && current < cinemaEnd - 40) travelCinema(1);
+      if (deltaY < 0 && current > cinemaTop + 40 && current <= cinemaEnd + 80) travelCinema(-1);
     };
 
     root.classList.add('guided-chapters');
     window.addEventListener('wheel', onWheel, {passive: false});
     window.addEventListener('touchstart', onTouchStart, {passive: true});
-    window.addEventListener('touchmove', onTouchMove, {passive: false});
-    window.addEventListener('touchend', onTouchEnd, {passive: false});
+    window.addEventListener('touchend', onTouchEnd, {passive: true});
     return () => {
       if (finePointer) {
         hero.removeEventListener('pointermove', move);
@@ -363,7 +319,6 @@ if (gsap && ScrollTrigger) {
       }
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('touchend', onTouchEnd);
       stopCinemaTravel();
       clearTimeout(releaseTimer);

@@ -69,7 +69,7 @@ if (gsap && ScrollTrigger) {
         .from('.invitation-backdrop', {scale: 1.08, opacity: .45, duration: 1.5}, 0)
         .from('.section-emblem span', {scaleX: 0, transformOrigin: 'center', duration: .55, stagger: .08}, .16)
         .from('.section-emblem i, .script-note', {y: 18, opacity: 0, duration: .65, stagger: .1}, .2)
-        .from('.invitation-copy .split-char', {yPercent: 112, rotation: 4, opacity: 0, duration: .72, stagger: .018}, .28)
+        .from('.invitation-copy h2', {clipPath: 'inset(0 100% 0 0)', opacity: .3, duration: 1.08, ease: 'power2.inOut'}, .28)
         .from('.invitation-copy > p:not(.script-note)', {y: 28, opacity: 0, duration: .78}, .68)
         .from('.invitation-signature', {y: 22, opacity: 0, duration: .72}, .82)
         .from('.invitation-glow', {scale: .65, opacity: 0, duration: 1.1}, .2)
@@ -77,16 +77,9 @@ if (gsap && ScrollTrigger) {
 
       gsap.to('.invitation-backdrop', {yPercent: -5, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.invitation-portrait', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.fromTo('.invitation-light', {xPercent: -32, opacity: .14}, {xPercent: 30, opacity: .6, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
     }
 
-    const cinemaCopy = document.querySelector('.cinema-copy');
-    if (cinemaCopy) {
-      const cinemaEntrance = gsap.timeline({scrollTrigger: {trigger: cinemaCopy, start: 'top 82%', once: true}});
-      cinemaEntrance
-        .from('.cinema-copy p', {y: 22, opacity: 0, duration: .65, ease: 'power3.out'}, 0)
-        .from('.cinema-copy .split-char', {yPercent: 115, opacity: 0, rotation: 3, duration: .72, stagger: .017, ease: 'power3.out'}, .12)
-        .from('.cinema-copy > span', {scale: 0, rotation: -35, opacity: 0, duration: .55, ease: 'back.out(1.6)'}, .58);
-    }
     const story = document.querySelector('.story');
     if (story) {
       const storyEntrance = gsap.timeline({
@@ -100,7 +93,7 @@ if (gsap && ScrollTrigger) {
         .from('.story-aura', {scale: .68, opacity: 0, duration: 1.25}, 0)
         .from('.story-art img', {y: 78, scale: .92, opacity: 0, duration: 1.35}, .19)
         .from('.story-flower', {scale: .72, opacity: 0, duration: .55}, .22)
-        .from('.story-copy .split-char', {yPercent: 112, rotation: 3, opacity: 0, duration: .76, stagger: .018}, .3)
+        .from('.story-copy h2', {clipPath: 'inset(0 0 100% 0)', y: 24, duration: 1.03, ease: 'power2.out'}, .3)
         .from('.story-copy > p:not(.story-signoff)', {y: 27, opacity: 0, duration: .72}, .57)
         .from('.story-rule', {scaleX: 0, duration: .62, transformOrigin: 'left center'}, .69)
         .from('.story-signoff', {y: 20, opacity: 0, duration: .7}, .79);
@@ -110,6 +103,7 @@ if (gsap && ScrollTrigger) {
       gsap.to('.story-mist', {yPercent: -8, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-canopy', {yPercent: 7, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-light', {yPercent: -12, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.story-ripple', {yPercent: -11, scale: 1.08, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-aura', {yPercent: -9, xPercent: 3, ease: 'none', scrollTrigger: storyScroll});
       gsap.to('.story-art img', {yPercent: -6, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
       gsap.to('.story-copy', {yPercent: -3, ease: 'none', scrollTrigger: {trigger: story, start: 'top bottom', end: 'bottom top', scrub: true}});
@@ -122,6 +116,8 @@ if (gsap && ScrollTrigger) {
     gsap.utils.toArray('.event').forEach(event => {
       gsap.from(event, {y: 36, opacity: 0, duration: .85, ease: 'power3.out', scrollTrigger: {trigger: event, start: 'top 88%', once: true}});
     });
+    gsap.to('.day-illumination', {yPercent: 55, ease: 'none', scrollTrigger: {trigger: '.celebration', start: 'top bottom', end: 'bottom top', scrub: true}});
+    gsap.to('.events-light', {scaleY: 1, ease: 'none', scrollTrigger: {trigger: '.events', start: 'top 78%', end: 'bottom 38%', scrub: true}});
     const closingEntrance = gsap.timeline({scrollTrigger: {trigger: '.closing', start: 'top 78%', once: true}});
     closingEntrance
       .from('.closing-glow', {scale: .7, opacity: 0, duration: 1.15, ease: 'power3.out'}, 0)
@@ -132,70 +128,95 @@ if (gsap && ScrollTrigger) {
     const cinema = document.querySelector('.cinema');
     const cinemaVideo = document.querySelector('.cinema-video');
     if (cinema && cinemaVideo && cinemaVideo.dataset.src) {
-      const updateCinemaExit = progress => cinema.style.setProperty('--cinema-exit', Math.min(1, Math.max(0, (progress - .82) / .18)).toFixed(4));
-      ScrollTrigger.create({trigger: cinema, start: 'top top', end: 'bottom bottom', onRefresh: self => updateCinemaExit(self.progress), onUpdate: self => updateCinemaExit(self.progress)});
+      const clamp = value => Math.min(1, Math.max(0, value));
+      const beats = [...cinema.querySelectorAll('.cinema-beat')].map(element => ({
+        element,
+        start: Number(element.dataset.beatStart),
+        end: Number(element.dataset.beatEnd)
+      }));
       const isMobileCinema = matchMedia('(max-width:700px)').matches;
       const cinemaSource = (isMobileCinema && cinemaVideo.dataset.mobileSrc) || cinemaVideo.dataset.src;
       if (isMobileCinema) cinemaVideo.poster = cinemaVideo.dataset.mobilePoster;
-      let cinemaInitialised = false;
+      let videoReady = false;
+      let sourceRequested = false;
+      let latestProgress = 0;
+      let easedProgress = 0;
+      let firstProgress = true;
+      let tickRaf = 0;
+      let seeking = false;
+      let displayedFrame = -1;
+      let finalFrame = 0;
+      let duration = 0;
       const sourceFrameRate = 24;
 
-      const initialiseCinema = () => {
-        if (cinemaInitialised) return;
-        const duration = cinemaVideo.duration;
-        if (!Number.isFinite(duration) || duration <= 0) return;
-        cinemaInitialised = true;
-        cinema.dataset.ready = 'true';
-        cinema.classList.add('is-ready');
-        cinemaVideo.pause();
-
-        const finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
-        const frameDuration = 1 / sourceFrameRate;
-        let targetFrame = Math.round(cinemaVideo.currentTime * sourceFrameRate);
-        let displayedFrame = -1;
-        let seeking = false;
-        let progressRaf = 0;
-        let latestProgress = 0;
-
-        const seekToTargetFrame = () => {
-          if (seeking || displayedFrame === targetFrame) return;
+      const tickVideo = () => {
+        tickRaf = 0;
+        if (!videoReady) return;
+        const difference = latestProgress - easedProgress;
+        easedProgress = Math.abs(difference) < .0006 ? latestProgress : easedProgress + difference * .16;
+        const nextFrame = Math.round(easedProgress * finalFrame);
+        if (!seeking && nextFrame !== displayedFrame) {
           seeking = true;
-          const requestedFrame = targetFrame;
-          cinemaVideo.currentTime = Math.min(duration - frameDuration / 2, requestedFrame * frameDuration);
+          const seekTime = Math.min(duration - 1 / (sourceFrameRate * 2), nextFrame / sourceFrameRate);
+          cinemaVideo.currentTime = Math.max(0, seekTime);
           cinemaVideo.addEventListener('seeked', () => {
-            displayedFrame = requestedFrame;
+            displayedFrame = nextFrame;
             seeking = false;
-            seekToTargetFrame();
+            if (Math.abs(latestProgress - easedProgress) > .0006 || Math.round(easedProgress * finalFrame) !== displayedFrame) scheduleTick();
           }, {once: true});
-        };
-
-        const applyProgress = () => {
-          progressRaf = 0;
-          cinema.style.setProperty('--cinema-progress', latestProgress.toFixed(4));
-          targetFrame = Math.round(latestProgress * finalFrame);
-          seekToTargetFrame();
-        };
-
-        const queueProgress = progress => {
-          latestProgress = progress;
-          if (!progressRaf) progressRaf = requestAnimationFrame(applyProgress);
-        };
-
-        displayedFrame = targetFrame;
-        ScrollTrigger.create({
-          trigger: cinema,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: true,
-          onRefresh: self => queueProgress(self.progress),
-          onUpdate: self => queueProgress(self.progress)
-        });
+        }
+        if (Math.abs(latestProgress - easedProgress) > .0006 && !tickRaf) scheduleTick();
       };
 
-      cinemaVideo.src = cinemaSource;
-      cinemaVideo.load();
-      if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) initialiseCinema();
-      else cinemaVideo.addEventListener('loadeddata', initialiseCinema, {once: true});
+      const scheduleTick = () => {
+        if (!tickRaf) tickRaf = requestAnimationFrame(tickVideo);
+      };
+
+      const updateCinema = progress => {
+        latestProgress = clamp(progress);
+        if (firstProgress) {
+          easedProgress = latestProgress;
+          firstProgress = false;
+        }
+        cinema.style.setProperty('--cinema-progress', latestProgress.toFixed(4));
+        cinema.style.setProperty('--cinema-exit', clamp((latestProgress - .87) / .13).toFixed(4));
+        beats.forEach(({element, start, end}) => {
+          const opacity = Math.min(clamp((latestProgress - start) / .055), clamp((end - latestProgress) / .055));
+          element.style.opacity = opacity.toFixed(4);
+          element.style.transform = `translate3d(0, ${(1 - opacity) * 22}px, 0)`;
+        });
+        if (videoReady) scheduleTick();
+      };
+
+      ScrollTrigger.create({trigger: cinema, start: 'top top', end: 'bottom bottom', onRefresh: self => updateCinema(self.progress), onUpdate: self => updateCinema(self.progress)});
+
+      const initialiseCinema = () => {
+        if (videoReady || !Number.isFinite(cinemaVideo.duration) || cinemaVideo.duration <= 0) return;
+        videoReady = true;
+        duration = cinemaVideo.duration;
+        finalFrame = Math.max(0, Math.floor(duration * sourceFrameRate) - 1);
+        cinemaVideo.pause();
+        cinema.classList.add('is-ready');
+        scheduleTick();
+      };
+
+      const requestSource = () => {
+        if (sourceRequested) return;
+        sourceRequested = true;
+        cinemaVideo.src = cinemaSource;
+        cinemaVideo.load();
+        if (cinemaVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) initialiseCinema();
+        else cinemaVideo.addEventListener('loadeddata', initialiseCinema, {once: true});
+      };
+
+      if ('IntersectionObserver' in window) {
+        const loader = new IntersectionObserver(entries => {
+          if (!entries[0].isIntersecting) return;
+          requestSource();
+          loader.disconnect();
+        }, {rootMargin: '1200px 0px'});
+        loader.observe(cinema);
+      } else requestSource();
     }
 
   });

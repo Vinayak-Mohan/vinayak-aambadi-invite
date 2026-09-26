@@ -76,7 +76,7 @@ a{color:inherit;text-decoration:none}
 .cinema{--cinema-progress:0;position:relative;height:500vh;min-height:3000px;background:#160b12;color:#fff3d9}
 .cinema-stage{position:sticky;top:0;min-height:100svh;height:100svh;overflow:hidden;isolation:isolate;display:flex;align-items:flex-end;padding:clamp(36px,7vw,105px);background:#160b12}
 .cinema-film,.cinema-film:after,.cinema-video{position:absolute;inset:0;width:100%;height:100%}
-.cinema-film{z-index:-2;background:#160b12 url('assets/kerala-courtyard-v2.webp') center/cover no-repeat}
+.cinema-film{z-index:-2;background:#160b12 url('assets/ceremony-film-desktop-poster.webp') center/cover no-repeat}
 .cinema-film:after{content:"";z-index:1;background:linear-gradient(90deg,#15080fe3 0%,#1809108c 38%,transparent 78%),linear-gradient(0deg,#15070fe8 0%,transparent 53%,#15070f69 100%);pointer-events:none}
 .cinema-video{z-index:0;display:block;object-fit:cover;object-position:center;filter:saturate(.84) contrast(1.03) brightness(.76);opacity:0;transition:opacity .25s linear}
 .cinema.is-ready .cinema-video{opacity:1}
@@ -208,7 +208,7 @@ a{color:inherit;text-decoration:none}
  .invitation-art{height:clamp(245px,42svh,320px)}
  .story-copy{padding-top:55px}
  .story h2{font-size:clamp(47px,12vw,59px)}
- .story-art{height:clamp(280px,46svh,340px)}
+ .story-art{height:clamp(220px,39svh,280px)}
 }
 @media(prefers-reduced-motion:reduce){.invitation-backdrop,.invitation-portrait{transform:none!important;opacity:1!important}}
 
@@ -267,3 +267,46 @@ a{color:inherit;text-decoration:none}
 }
 @media(max-width:350px){.day-heading h2{font-size:clamp(75px,24vw,90px)}.day-heading h2>span:last-child{font-size:clamp(42px,13.5vw,50px)}.day-heading h2 i{font-size:.7em}.event{grid-template-columns:minmax(0,1fr) 24px}.event h3{font-size:2.25rem}}
 @media(prefers-reduced-motion:reduce){.story-world>div{transform:none!important;opacity:1!important}.cinema-transition{opacity:0}.cinema-copy,.cinema-progress{opacity:1}}
+
+/* Light and foreground movement connect the printed invitation to the film. */
+.invitation-light{position:absolute;z-index:1;inset:-30%;pointer-events:none;background:linear-gradient(112deg,transparent 39%,#efc08013 47%,#f8dcad2b 51%,transparent 58%);mix-blend-mode:screen;opacity:.2}
+.invitation-art:after{content:"";position:absolute;z-index:-1;width:74%;height:82%;border-radius:50%;border:1px solid #e5b76b38;box-shadow:0 0 0 23px #e8b86b0a,0 0 0 49px #e8b86b09;pointer-events:none}
+
+/* The film has three editorial beats with breathing room between them. */
+.cinema-stage{display:block}
+.cinema-glimmer{position:absolute;z-index:1;inset:0;pointer-events:none;background:radial-gradient(ellipse 30% 50% at 73% 56%,#d7a45e18,transparent 80%);mix-blend-mode:screen}
+.cinema-narrative{position:absolute;z-index:2;left:clamp(35px,7vw,105px);bottom:clamp(70px,11svh,125px);width:min(48vw,690px);height:clamp(235px,30svh,320px);text-shadow:0 4px 24px #10070bdc;opacity:calc(1 - var(--cinema-exit,0));pointer-events:none}
+.cinema-beat{position:absolute;inset:auto 0 0;opacity:0;will-change:transform,opacity}
+.cinema-beat:first-child{opacity:1}
+.cinema-beat p{margin:0 0 16px;color:#f0cb8d;font:italic 400 clamp(22px,2.1vw,31px) var(--display)}
+.cinema-beat h2,.cinema-beat h3{margin:0;color:#fff4df;font:400 clamp(67px,7.5vw,132px)/.91 var(--editorial);letter-spacing:-.047em;text-wrap:balance}
+.cinema-beat h3{font-size:clamp(60px,6.7vw,111px)}
+.cinema-film:after{background:linear-gradient(90deg,#140911ed 0%,#160a11b0 36%,#180b1152 58%,transparent 82%),linear-gradient(0deg,#14070ce3 0%,transparent 46%,#14070c5c 100%)}
+.cinema-video{filter:saturate(.93) contrast(1.04) brightness(.88)}
+.cinema-progress{height:2px;background:#e2be8066}
+.cinema-progress:after{box-shadow:0 0 12px #edbf70}
+
+/* Water, canopy and light retain different apparent depths. */
+.story-ripple{inset:36% 38% 1% -24%!important;background:radial-gradient(ellipse 48% 28% at 45% 62%,#f3ce8c20,transparent 75%);mix-blend-mode:screen;filter:blur(13px);opacity:.8}
+
+/* A measured line of light follows the real wedding schedule. */
+.day-illumination{position:absolute;z-index:-1;left:35%;top:5%;width:55%;height:45%;border-radius:50%;background:radial-gradient(ellipse,#fff8e985,transparent 69%);filter:blur(24px);pointer-events:none}
+.events{position:relative}
+.events-light{position:absolute;z-index:0;left:calc(25% + 14px);top:34px;bottom:34px;width:2px;background:linear-gradient(180deg,#b98954,#e1b96d 54%,#9e5c53);box-shadow:0 0 16px #cf995982;transform:scaleY(0);transform-origin:top;pointer-events:none}
+.event{position:relative;z-index:1}
+
+@media(max-width:700px){
+ .invitation-art:after{width:68%;height:78%;box-shadow:0 0 0 15px #e8b86b0a,0 0 0 31px #e8b86b09}
+ .cinema-narrative{left:25px;bottom:clamp(85px,12svh,120px);width:min(76vw,350px);height:clamp(205px,30svh,270px)}
+ .cinema-beat p{font-size:clamp(19px,5vw,23px);margin-bottom:12px}
+ .cinema-beat h2,.cinema-beat h3{font-size:clamp(50px,12.3vw,69px);line-height:.96}
+ .cinema-beat h3{font-size:clamp(46px,11vw,62px)}
+ .cinema-film:after{background:linear-gradient(90deg,#160a12 0%,#160a12 52%,#160a12dd 68%,transparent 94%),linear-gradient(0deg,#15080dd1 0%,transparent 58%,#16090d56 100%)}
+ .cinema-film{background-image:url('assets/ceremony-film-mobile-poster.webp')}
+ .cinema-video{filter:saturate(.94) contrast(1.02) brightness(.91)}
+ .day-illumination{left:-16%;width:105%;top:8%;height:28%}
+ .events-light{left:0;top:18px;bottom:18px;width:1px;opacity:.7}
+ .event{padding-left:15px}
+}
+@media(max-height:700px) and (max-width:700px){.cinema-narrative{bottom:65px;height:210px}.cinema-beat h2,.cinema-beat h3{font-size:clamp(42px,10svh,57px)}}
+@media(prefers-reduced-motion:reduce){.invitation-light,.cinema-glimmer,.story-ripple,.day-illumination,.events-light{display:none}.cinema-narrative{position:relative;left:auto;bottom:auto;width:100%;height:auto;padding:0 24px}.cinema-beat{position:relative;opacity:1!important;transform:none!important;margin:18px 0}.cinema-beat:not(:first-child){display:none}}

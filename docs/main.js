@@ -52,7 +52,7 @@ if (gsap && ScrollTrigger) {
     gsap.to('.hero-arch img', {yPercent: 1.8, rotation: .35, transformOrigin: '50% 0%', duration: 6.7, repeat: -1, yoyo: true, ease: 'sine.inOut'});
     gsap.to('.hero-figure img', {y: -7, rotation: -.28, transformOrigin: '50% 100%', duration: 4.8, repeat: -1, yoyo: true, ease: 'sine.inOut'});
     gsap.to('.hero-light', {scale: 1.09, opacity: .72, duration: 5.4, repeat: -1, yoyo: true, ease: 'sine.inOut'});
-    gsap.to('.love-mark svg', {y: -3, rotation: 1.8, duration: 4.2, repeat: -1, yoyo: true, ease: 'sine.inOut'});
+    gsap.to('.love-mark img', {y: -3, rotation: 1.8, duration: 4.2, repeat: -1, yoyo: true, ease: 'sine.inOut'});
 
     gsap.to('.hero-bg-wrap', {yPercent: 13, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
     gsap.to('.hero-arch', {yPercent: 19, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
@@ -66,31 +66,17 @@ if (gsap && ScrollTrigger) {
         scrollTrigger: {trigger: invitation, start: 'top 72%', once: true}
       });
       invitationEntrance
-        .from('.invitation-sun', {scale: .72, opacity: 0, duration: 1.35}, 0)
-        .from('.botanical-left', {x: -90, rotation: -30, opacity: 0, duration: 1.2}, .05)
-        .from('.botanical-right', {x: 90, rotation: 176, opacity: 0, duration: 1.2}, .08)
+        .from('.invitation-backdrop', {scale: 1.08, opacity: .45, duration: 1.5}, 0)
         .from('.section-emblem span', {scaleX: 0, transformOrigin: 'center', duration: .55, stagger: .08}, .16)
         .from('.section-emblem i, .script-note', {y: 18, opacity: 0, duration: .65, stagger: .1}, .2)
         .from('.invitation-copy .split-char', {yPercent: 112, rotation: 4, opacity: 0, duration: .72, stagger: .018}, .28)
         .from('.invitation-copy > p:not(.script-note)', {y: 28, opacity: 0, duration: .78}, .68)
         .from('.invitation-signature', {y: 22, opacity: 0, duration: .72}, .82)
-        .from('.art-aura', {scale: .62, opacity: 0, duration: 1.15}, .15)
-        .from('.ring-outer', {scale: .55, rotation: -18, opacity: 0, duration: 1.25}, .2)
-        .from('.ring-inner', {scale: .45, rotation: 22, opacity: 0, duration: 1.2}, .3)
-        .from('.portrait-echo', {scale: .88, opacity: 0, duration: 1.05}, .36)
-        .from('.portrait-frame', {y: 76, scale: .94, opacity: 0, duration: 1.25}, .39)
-        .from('.portrait-jewel, .gold-dust', {scale: 0, opacity: 0, duration: .5, stagger: .08}, .8);
+        .from('.invitation-glow', {scale: .65, opacity: 0, duration: 1.1}, .2)
+        .from('.invitation-portrait', {y: 65, scale: .96, opacity: 0, duration: 1.35}, .36);
 
-      const invitationScroll = {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true};
-      gsap.to('.invitation-sun', {yPercent: -9, xPercent: -2, ease: 'none', scrollTrigger: invitationScroll});
-      gsap.to('.botanical-left', {yPercent: -13, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.botanical-right', {yPercent: 11, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.art-aura', {yPercent: -7, scale: 1.04, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.ring-outer', {yPercent: -10, rotation: 8, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.ring-inner', {yPercent: -5, rotation: -10, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.portrait-frame', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.gold-dust', {yPercent: -24, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
-      gsap.to('.portrait-jewel', {scale: 1.18, opacity: .58, duration: 2.1, repeat: -1, yoyo: true, stagger: .45, ease: 'sine.inOut'});
+      gsap.to('.invitation-backdrop', {yPercent: -5, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
+      gsap.to('.invitation-portrait', {yPercent: -4, ease: 'none', scrollTrigger: {trigger: invitation, start: 'top bottom', end: 'bottom top', scrub: true}});
     }
 
     const cinemaCopy = document.querySelector('.cinema-copy');

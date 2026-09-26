@@ -11,12 +11,9 @@ a{color:inherit;text-decoration:none}
 .split-word,.split-char{display:inline-block}.split-word{overflow:hidden;vertical-align:bottom;white-space:nowrap}.split-space{display:inline-block;width:.24em}.split-char{will-change:transform,opacity}
 
 .hero{position:relative;isolation:isolate;min-height:0;height:100dvh;max-height:none;overflow:hidden;background:#1e101b}
-.love-mark{position:absolute;z-index:12;top:clamp(20px,3vw,39px);left:clamp(23px,4.7vw,78px);display:grid;width:clamp(56px,5vw,72px);aspect-ratio:1;place-items:center;color:#f0d28f;filter:drop-shadow(0 7px 20px #10060c9c);transition:color .3s,filter .3s}
-.love-mark:hover{color:#ffe7aa;filter:drop-shadow(0 8px 26px #f1ca7766)}
-.love-mark svg{display:block;width:100%;height:100%;overflow:visible}
-.love-mark-halo{fill:#2b111fe0;stroke:currentColor;stroke-width:.7}
-.love-mark-knot,.love-mark-cross{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
-.love-mark-knot{stroke-width:1.45}.love-mark-cross{stroke-width:1.05;opacity:.72}.love-mark-jewel{fill:#fff0bf}
+.love-mark{position:absolute;z-index:12;top:clamp(16px,2.6vw,32px);left:clamp(16px,4vw,66px);display:grid;width:clamp(86px,7.7vw,122px);aspect-ratio:1.22;place-items:center;filter:drop-shadow(0 7px 18px #10060cc7);transition:filter .3s}
+.love-mark:hover{filter:drop-shadow(0 4px 17px #f1ca7788)}
+.love-mark img{display:block;width:100%;max-width:none;height:100%;object-fit:contain}
 .love-mark span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hero-world,.hero-bg-wrap,.hero-bg-drift,.hero-bg,.hero-veil,.hero-light,.hero-ground{position:absolute;inset:0}
 .hero-bg-wrap{overflow:hidden}
@@ -86,7 +83,7 @@ a{color:inherit;text-decoration:none}
 .cinema-copy{position:relative;z-index:2;max-width:610px;padding-bottom:clamp(33px,7vh,82px);text-shadow:0 4px 22px #13070cd1}
 .cinema-copy p{margin:0 0 17px;color:#e6c887;font:italic 400 clamp(20px,2vw,29px) var(--display)}
 .cinema-copy h2{margin:0;font:400 clamp(68px,8.3vw,148px)/.86 var(--editorial);letter-spacing:-.045em;text-wrap:balance}
-.cinema-copy span{display:block;margin-top:29px;color:#e2bd77;font-size:23px}
+.cinema-copy > span{display:block;margin-top:29px;color:#e2bd77;font-size:23px}
 .cinema-progress{position:absolute;z-index:3;right:clamp(36px,7vw,105px);bottom:clamp(38px,7vh,80px);width:min(180px,24vw);height:1px;background:#efd3965c}
 .cinema-progress:after{content:"";display:block;width:100%;height:100%;background:#f2d38d;transform:scaleX(var(--cinema-progress));transform-origin:left}
 
@@ -152,3 +149,65 @@ a{color:inherit;text-decoration:none}
 @media(max-height:740px) and (max-width:700px){.love-mark{width:46px;top:11px}.hero-copy{top:70px}.hero-malayalam{font-size:14px}.hero-prelude{margin-bottom:9px}.hero h1{font-size:clamp(50px,14dvh,66px)}.hero-details{margin:8px 0;font-size:11px}.hero-figure-wrap{height:44%}.hero-edge{display:none}.invitation{padding-top:62px;padding-bottom:14px}.section-emblem{display:none}.invitation h2{font-size:clamp(39px,10.5vw,50px)}.invitation-copy>p:not(.script-note){line-height:1.45}.invitation-art{height:230px}.invitation-art .art-aura{width:220px;height:220px}.invitation-art .ring-outer{width:190px;box-shadow:0 0 0 14px #b68d5c17,0 0 0 28px #b68d5c12}.invitation-art .ring-inner{width:160px}.portrait-frame{height:230px;max-width:250px}.story-copy{padding-top:62px}.story h2{font-size:clamp(47px,12vw,60px)}.story-art{height:clamp(210px,36dvh,280px)}}
 @media(max-height:760px) and (min-width:701px){.hero-copy{top:120px}.hero h1{font-size:clamp(72px,8vw,118px)}.hero-prelude{margin-bottom:16px}.hero-details{margin:16px 0}.hero-figure-wrap{height:86%}.story-copy{padding-top:55px;padding-bottom:55px}.story h2{font-size:clamp(58px,5.5vw,88px)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-petal{animation:none}.hero-bg,.hero-bg-drift,.hero-figure,.hero-figure img,.hero-arch,.hero-arch img,.invitation-layers>*,.invitation-art>*,.story-art img,.split-char{transform:none!important;opacity:1!important}.cinema{height:auto;min-height:620px}.cinema-stage{position:relative;min-height:620px;height:80svh}.cinema-video{display:none}.cinema-progress{display:none}}
+
+/* The invitation portrait includes its own painted oval. Let the art be the frame. */
+.invitation{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(16px,3vw,55px);padding:clamp(55px,8dvh,100px) clamp(35px,8vw,145px);background:#200e18;color:#fff1d7}
+.invitation:before{z-index:4;border-color:#e9ca8559}
+.invitation:after{display:none}
+.invitation-backdrop{position:absolute;z-index:0;inset:-4%;background:url('assets/ceremony-hall-invitation.png') center/cover no-repeat;will-change:transform}
+.invitation-backdrop:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#1b0a16ec 0%,#250d1ad1 34%,#24101c72 62%,#1509145e 100%),linear-gradient(0deg,#170911c4,transparent 28%,#1c0b15a1)}
+.invitation-copy{z-index:2;max-width:690px;text-shadow:0 3px 18px #11071085}
+.invitation .section-emblem{color:#e6bd79}
+.invitation .script-note{color:#f0ca8a}
+.invitation h2{color:#fff4db;font-size:clamp(54px,5.3vw,96px);line-height:.97}
+.invitation-copy>p:not(.script-note){color:#efdfcf;line-height:1.75}
+.invitation-signature{color:#f5dfae}
+.invitation-signature span{color:#e8bd76}
+.invitation-art{z-index:2;min-height:0;height:min(78dvh,720px);overflow:visible;contain:none;display:flex;align-items:center;justify-content:center}
+.invitation-glow{position:absolute;width:92%;height:76%;border-radius:50%;background:radial-gradient(ellipse,#d5975e59,transparent 68%);filter:blur(16px);pointer-events:none}
+.invitation-portrait{position:relative;width:auto;max-width:min(100%,660px);height:100%;object-fit:contain;filter:drop-shadow(0 25px 24px #10070cca);will-change:transform}
+.cinema-copy h2{width:max-content;max-width:100%;text-wrap:balance}
+.love-mark{isolation:isolate}
+.love-mark:before{content:"";position:absolute;z-index:-1;inset:-15%;border-radius:50%;background:radial-gradient(ellipse,#170a16b8,transparent 70%);pointer-events:none}
+.love-mark img{width:140%;height:140%}
+
+@media(max-width:700px){
+ .love-mark{top:4px;left:10px;right:auto;width:76px;aspect-ratio:1.16}
+ .invitation{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;gap:0;min-height:100dvh;padding:clamp(68px,8dvh,84px) 28px 0}
+ .invitation:before{inset:13px}
+ .invitation-backdrop{inset:-2%;background-position:77% center}
+ .invitation-backdrop:after{background:linear-gradient(180deg,#1b0916ed 0%,#210c1ad2 40%,#210d1c76 70%,#160914a8 100%),linear-gradient(90deg,#1a0a159c,transparent 90%)}
+ .invitation-copy{flex:none}
+ .invitation .section-emblem{margin-bottom:10px}
+ .invitation .script-note{font-size:18px;margin-bottom:10px}
+ .invitation h2{font-size:clamp(43px,11.1vw,60px);line-height:.95;margin-bottom:13px}
+ .invitation-copy>p:not(.script-note){font-size:13px;line-height:1.51;margin:0;max-width:40ch}
+ .invitation-signature{margin-top:14px;font-size:clamp(27px,7.3vw,34px)}
+ .invitation-art{flex:none;align-self:center;min-height:0;width:calc(100% + 50px);height:clamp(305px,48dvh,430px);margin:0 -25px -3px}
+ .invitation-glow{width:86%;height:75%}
+ .invitation-portrait{max-width:100%;height:100%}
+ .cinema-copy{max-width:calc(100vw - 48px);padding-bottom:42px}
+ .cinema-copy h2{font-size:clamp(48px,12.7vw,68px);line-height:.9;white-space:normal}
+ .cinema-copy > span{margin-top:18px}
+ .story{display:block;min-height:100dvh}
+ .story-copy{position:relative;z-index:4;padding:clamp(61px,7dvh,77px) 28px 0;max-width:420px}
+ .story-art{position:absolute;z-index:2;inset:auto 0 0;width:100%;height:clamp(330px,52dvh,480px);min-height:0;order:initial;align-items:flex-end;justify-content:center;overflow:clip}
+ .story-art img{height:100%;width:auto;max-width:none;object-fit:contain;object-position:center bottom}
+ .story-aura{top:4%;width:min(110vw,460px)}
+ .story-disc{top:9%;width:min(100vw,420px)}
+ .story-orbit{top:15%;width:min(82vw,340px)}
+ .story h2{font-size:clamp(53px,13vw,70px);line-height:.95;margin-bottom:14px}
+ .story-copy>p:not(.story-signoff){font-size:13px;line-height:1.55;max-width:37ch}
+ .story-rule{margin:14px 0 10px}
+ .story-signoff{font-size:19px}
+}
+@media(max-height:740px) and (max-width:700px){
+ .invitation{padding-top:59px}
+ .invitation h2{font-size:clamp(39px,10.4vw,49px)}
+ .invitation-copy>p:not(.script-note){line-height:1.4}
+ .invitation-art{height:clamp(245px,42dvh,320px)}
+ .story-copy{padding-top:55px}
+ .story h2{font-size:clamp(47px,12vw,59px)}
+ .story-art{height:clamp(280px,46dvh,340px)}
+}
+@media(prefers-reduced-motion:reduce){.invitation-backdrop,.invitation-portrait{transform:none!important;opacity:1!important}}

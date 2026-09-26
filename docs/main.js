@@ -124,9 +124,8 @@ if (gsap && ScrollTrigger) {
 
   });
 
-  motion.add('(prefers-reduced-motion: no-preference)', () => {
+  motion.add('(prefers-reduced-motion: no-preference) and (pointer: fine)', () => {
     const hero = document.querySelector('.hero');
-    const finePointer = matchMedia('(pointer: fine)').matches;
     const backgroundX = gsap.quickTo('.hero-bg', 'x', {duration: .9, ease: 'power2.out'});
     const backgroundY = gsap.quickTo('.hero-bg', 'y', {duration: .9, ease: 'power2.out'});
     const figureX = gsap.quickTo('.hero-figure', 'x', {duration: .7, ease: 'power2.out'});
@@ -139,190 +138,11 @@ if (gsap && ScrollTrigger) {
       figureX(x * 24); figureY(y * 13);
     };
     const reset = () => {backgroundX(0); backgroundY(0); figureX(0); figureY(0);};
-    if (finePointer) {
-      hero.addEventListener('pointermove', move, {passive: true});
-      hero.addEventListener('pointerleave', reset);
-    }
-
-    const invitation = document.querySelector('.invitation');
-    const cinema = document.querySelector('.cinema');
-    const story = document.querySelector('.story');
-    const celebration = document.querySelector('.celebration');
-    const closing = document.querySelector('.closing');
-    const events = [...document.querySelectorAll('.event')];
-    const chapterTargets = [hero, invitation, cinema, story, celebration, closing, ...events];
-    const root = document.documentElement;
-    let chapterLocked = false;
-    let cinemaFrame = 0;
-    let releaseTimer = 0;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchGesture = false;
-
-    const topOf = element => element.getBoundingClientRect().top + window.scrollY;
-    const releaseChapter = () => {
-      chapterLocked = false;
-      clearTimeout(releaseTimer);
-    };
-    const lockForScroll = () => {
-      chapterLocked = true;
-      clearTimeout(releaseTimer);
-      releaseTimer = window.setTimeout(releaseChapter, 1100);
-      if ('onscrollend' in window) window.addEventListener('scrollend', releaseChapter, {once: true});
-    };
-    const scrollToPoint = point => {
-      lockForScroll();
-      window.scrollTo({top: point, behavior: 'smooth'});
-    };
-    const stopCinemaTravel = () => {
-      if (cinemaFrame) cancelAnimationFrame(cinemaFrame);
-      cinemaFrame = 0;
-      root.classList.remove('is-cinema-auto-scroll');
-    };
-    const travelCinema = direction => {
-      const cinemaTop = topOf(cinema);
-      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
-      const start = Math.max(cinemaTop, Math.min(window.scrollY, cinemaEnd));
-      const end = direction > 0 ? cinemaEnd : cinemaTop;
-      const distance = Math.abs(end - start);
-      const fullDistance = Math.max(1, cinemaEnd - cinemaTop);
-      const videoDuration = cinema.querySelector('.cinema-video')?.duration || 8;
-      const duration = Math.max(1100, videoDuration * 1000 * distance / fullDistance);
-      const run = () => {
-        root.classList.add('is-cinema-auto-scroll');
-        const startedAt = performance.now();
-        const advance = now => {
-          const progress = Math.min(1, (now - startedAt) / duration);
-          window.scrollTo(0, start + (end - start) * progress);
-          if (progress < 1) cinemaFrame = requestAnimationFrame(advance);
-          else {
-            cinemaFrame = 0;
-            root.classList.remove('is-cinema-auto-scroll');
-            releaseChapter();
-          }
-        };
-        cinemaFrame = requestAnimationFrame(advance);
-      };
-
-      chapterLocked = true;
-      if (direction > 0 && window.scrollY < cinemaTop - 24) {
-        const transitionStart = window.scrollY;
-        const transitionDistance = cinemaTop - transitionStart;
-        const transitionDuration = Math.min(760, Math.max(340, transitionDistance * .28));
-        const transitionedAt = performance.now();
-        root.classList.add('is-cinema-auto-scroll');
-        const enterCinema = now => {
-          const progress = Math.min(1, (now - transitionedAt) / transitionDuration);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          window.scrollTo(0, transitionStart + transitionDistance * eased);
-          if (progress < 1) cinemaFrame = requestAnimationFrame(enterCinema);
-          else {
-            cinemaFrame = 0;
-            root.classList.remove('is-cinema-auto-scroll');
-            run();
-          }
-        };
-        cinemaFrame = requestAnimationFrame(enterCinema);
-      } else run();
-    };
-    const moveChapter = direction => {
-      if (chapterLocked || chapterTargets.some(target => !target)) return chapterLocked;
-      const invitationTop = topOf(invitation);
-      const cinemaTop = topOf(cinema);
-      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
-      const storyTop = topOf(story);
-      const celebrationTop = topOf(celebration);
-      const closingTop = topOf(closing);
-      const eventStops = events.map(event => Math.max(0, topOf(event) - Math.max(24, (window.innerHeight - event.offsetHeight) / 2)));
-      const current = window.scrollY;
-      let handled = false;
-
-      if (direction > 0) {
-        if (current < invitationTop - 40) {
-          scrollToPoint(invitationTop);
-          handled = true;
-        } else if (current < cinemaEnd - 40) {
-          travelCinema(1);
-          handled = true;
-        } else if (current < storyTop - 40) {
-          scrollToPoint(storyTop);
-          handled = true;
-        } else if (current < celebrationTop - 40) {
-          scrollToPoint(celebrationTop);
-          handled = true;
-        } else {
-          const nextStop = [...eventStops, closingTop].find(stop => stop > current + 40);
-          if (nextStop !== undefined) scrollToPoint(nextStop);
-          handled = nextStop !== undefined;
-        }
-      } else if (direction < 0) {
-        if (current <= invitationTop + 40) {
-          scrollToPoint(topOf(hero));
-          handled = true;
-        } else if (current <= cinemaTop + 40) {
-          scrollToPoint(invitationTop);
-          handled = true;
-        } else if (current <= cinemaEnd + 40) {
-          travelCinema(-1);
-          handled = true;
-        } else if (current <= storyTop + 40) {
-          scrollToPoint(cinemaEnd);
-          handled = true;
-        } else if (current <= celebrationTop + 40) {
-          scrollToPoint(storyTop);
-          handled = true;
-        } else {
-          const previousStop = [celebrationTop, ...eventStops].filter(stop => stop < current - 40).at(-1);
-          if (previousStop !== undefined) scrollToPoint(previousStop);
-          handled = previousStop !== undefined;
-        }
-      }
-
-      return handled;
-    };
-    const onWheel = event => {
-      if (Math.abs(event.deltaY) < 12 || event.ctrlKey) return;
-      if (moveChapter(Math.sign(event.deltaY))) event.preventDefault();
-    };
-    const onTouchStart = event => {
-      if (event.touches.length !== 1) return;
-      if (cinemaFrame) {
-        stopCinemaTravel();
-        releaseChapter();
-      }
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-      touchGesture = true;
-    };
-    const onTouchEnd = event => {
-      if (!touchGesture) return;
-      touchGesture = false;
-      const touch = event.changedTouches[0];
-      const deltaY = touchStartY - touch.clientY;
-      const deltaX = touchStartX - touch.clientX;
-      if (Math.abs(deltaY) < 34 || Math.abs(deltaY) <= Math.abs(deltaX)) return;
-      const cinemaTop = topOf(cinema);
-      const cinemaEnd = cinemaTop + cinema.offsetHeight - window.innerHeight;
-      const current = window.scrollY;
-      if (deltaY > 0 && current >= cinemaTop - 80 && current < cinemaEnd - 40) travelCinema(1);
-      if (deltaY < 0 && current > cinemaTop + 40 && current <= cinemaEnd + 80) travelCinema(-1);
-    };
-
-    root.classList.add('guided-chapters');
-    window.addEventListener('wheel', onWheel, {passive: false});
-    window.addEventListener('touchstart', onTouchStart, {passive: true});
-    window.addEventListener('touchend', onTouchEnd, {passive: true});
+    hero.addEventListener('pointermove', move, {passive: true});
+    hero.addEventListener('pointerleave', reset);
     return () => {
-      if (finePointer) {
-        hero.removeEventListener('pointermove', move);
-        hero.removeEventListener('pointerleave', reset);
-      }
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchend', onTouchEnd);
-      stopCinemaTravel();
-      clearTimeout(releaseTimer);
-      root.classList.remove('guided-chapters');
+      hero.removeEventListener('pointermove', move);
+      hero.removeEventListener('pointerleave', reset);
     };
   });
 

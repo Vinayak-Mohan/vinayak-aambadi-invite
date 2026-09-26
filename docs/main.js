@@ -190,7 +190,6 @@ if (gsap && ScrollTrigger) {
           onRefresh: self => queueProgress(self.progress),
           onUpdate: self => queueProgress(self.progress)
         });
-        ScrollTrigger.refresh();
       };
 
       cinemaVideo.src = cinemaSource;
@@ -222,7 +221,4 @@ if (gsap && ScrollTrigger) {
       hero.removeEventListener('pointerleave', reset);
     };
   });
-
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
-  document.querySelector('.hero-bg')?.addEventListener('load', () => ScrollTrigger.refresh(), {once: true});
 }

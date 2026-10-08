@@ -1,5 +1,2 @@
-/* Keep glyphs, accents and descenders unmasked, with natural word wrapping. */
-.type-word,.type-letter{display:inline-block;transform-origin:50% 100%}
-.type-word{white-space:nowrap}
-.welcome-copy h2 .type-word{display:inline-block}
-@media(prefers-reduced-motion:reduce){.type-word,.type-letter{transform:none!important;opacity:1!important}}
+/* Text retains its original typography and natural wrapping. */
+@media(prefers-reduced-motion:reduce){#couple-names,#invite-title,#invitation-title{clip-path:none}}

@@ -110,7 +110,6 @@ if (gsap && ScrollTrigger) {
         .from('.invitation-haze', {y: 38, opacity: 0, duration: 1.2}, .12)
         .from('.section-emblem span', {scaleX: 0, transformOrigin: 'center', duration: .55, stagger: .08}, .16)
         .from('.section-emblem i, .script-note', {y: 18, opacity: 0, duration: .65, stagger: .1}, .2)
-        .from('.invitation-copy h2', {clipPath: 'inset(0 100% 0 0)', opacity: .3, duration: 1.08, ease: 'power2.inOut'}, .28)
         .from('.invitation-copy > p:not(.script-note)', {y: 28, opacity: 0, duration: .78}, .68)
         .from('.invitation-signature', {y: 22, opacity: 0, duration: .72}, .82)
         .from('.invitation-glow', {scale: .65, opacity: 0, duration: 1.1}, .2)
@@ -145,7 +144,6 @@ if (gsap && ScrollTrigger) {
         .from('.story-aura', {scale: .9, opacity: .55, duration: .85}, 0)
         .from('.story-art img', {y: 32, scale: .98, opacity: .7, duration: .85}, .08)
         .from('.story-flower', {y: 12, opacity: 0, duration: .45}, .08)
-        .from('.story-copy h2', {y: 24, opacity: 0, duration: .7}, .12)
         .from('.story-copy > p:not(.story-signoff)', {y: 18, opacity: 0, duration: .58}, .24)
         .from('.story-rule', {scaleX: 0, duration: .52, transformOrigin: 'left center'}, .3)
         .from('.story-signoff', {y: 14, opacity: 0, duration: .58}, .36);

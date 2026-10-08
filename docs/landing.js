@@ -3,7 +3,7 @@ if (['#invitation', '#cinema', '#our-story', '#the-day'].includes(location.hash)
   location.replace('invite.html' + location.hash);
 }
 
-// Reveal complete scenes once. The default without JavaScript stays visible.
+// Artwork enters once; typography uses its own per-element choreography.
 if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
   document.documentElement.classList.add('motion-ready');
   const reveal = new IntersectionObserver(entries => {

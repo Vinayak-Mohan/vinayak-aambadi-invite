@@ -10,3 +10,31 @@
 @media(max-width:700px){.welcome-inner{padding:20px 26px 24px;display:flex;flex-direction:column;min-height:0}.welcome-brand{gap:10px}.welcome-brand img{width:48px}.welcome-brand p{font-size:16px}.welcome-brand span{font-size:10px}.welcome-copy{padding:34px 0 0;width:100%}.greeting{max-width:100%;font-size:11px;margin-bottom:20px}h1{font-size:clamp(64px,18vw,88px);line-height:.93;margin-bottom:22px}.welcome-note{font-size:12px;line-height:1.65;margin-bottom:24px}.invite-links{max-width:none;gap:10px}.invite-link{min-height:72px;padding:13px 16px;gap:14px}.invite-link strong{font-size:15px}.invite-link small{font-size:10px}.ar-note{max-width:100%;font-size:10px;margin-top:12px}.welcome-art{align-self:center;min-height:0;height:400px;width:100%;margin-top:20px}.art-parallax{width:240px;max-height:none;padding-bottom:30px}.art-parallax img{filter:drop-shadow(0 12px 12px #130c1560)}.art-caption{font-size:21px;bottom:0}.art-ground{bottom:10%}.venues-jump{align-self:center;margin-top:18px}.courtyard{background-position:70% center;opacity:.26}.locations{padding:36px 26px 28px}.locations-heading{display:block;margin-bottom:28px}.locations-heading h2{font-size:33px;max-width:16ch;margin-bottom:14px}.locations-heading>p{font-size:11px}.venue-list{grid-template-columns:1fr;gap:30px}.venue{grid-template-columns:1fr;gap:17px;padding-top:21px}.venue-type{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.venue-type h3{font-size:12px}.venue-type p{font-size:10px;white-space:nowrap}.venue-details h4{font-size:30px}.venue-details h4 br{display:none}.venue-details h4 br:after{content:' '}.venue-details h4{max-width:20ch}.venue-details a{font-size:12px;min-height:44px}footer{font-size:10px;margin-top:32px;align-items:center}footer p{max-width:23ch}footer a{white-space:nowrap}}
 @media(max-width:360px){.welcome-inner{padding-inline:20px}.locations{padding-inline:20px}.greeting{max-width:26ch}.welcome-art{height:380px}.art-parallax{width:226px}.venue-type{display:block}.venue-type h3{margin-bottom:5px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.courtyard,.art-parallax,.art-halo{transform:none}}
+
+/* Venue directions are the first action on the wedding home. */
+.locations{padding-top:32px;padding-bottom:48px}
+.location-brand{display:flex;align-items:center;gap:18px;margin-bottom:42px}
+.location-brand img{width:58px;height:auto}
+.location-brand h1{font:400 40px/1.05 'Instrument Serif',Georgia,serif;margin:0 0 9px;letter-spacing:-.02em;color:var(--green)}
+.location-brand p{margin:0;color:#71614f;font-size:12px}
+.locations-heading{margin-bottom:28px}
+.venue{grid-template-columns:1fr;gap:12px}
+.venue-type{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.venue-type h3{font-size:14px}.venue-type p{font-size:12px}
+.venue-details h4{font-size:36px}.venue-details>p{font-size:13px}
+.venue-details a{display:inline-flex;min-height:48px;padding:12px 18px;gap:18px;background:var(--green);color:var(--paper);border:0;border-radius:3px;font-size:13px}
+.venue-details a:hover{background:#18372e}
+.welcome-inner{grid-template-rows:1fr;min-height:660px;padding-top:28px;padding-bottom:28px}
+.welcome-copy h2{margin:0 0 24px;font:400 clamp(64px,7vw,94px)/.94 'Instrument Serif',Georgia,serif;letter-spacing:-.025em}
+.welcome-footer{max-width:1152px;margin:0 auto;padding:22px 0 28px;color:var(--muted);border-top-color:#ddc49a30}
+@media(max-width:1000px){.welcome-footer{margin-inline:40px}.location-brand{margin-bottom:32px}}
+@media(max-width:700px){
+ .locations{padding:22px 26px 32px}.location-brand{gap:13px;margin-bottom:28px}.location-brand img{width:44px}
+ .location-brand h1{font-size:30px;margin-bottom:7px}.location-brand p{font-size:10px;line-height:1.6}
+ .locations-heading{margin-bottom:18px}.locations-heading h2{font-size:30px;margin-bottom:9px}.locations-heading>p{font-size:11px}
+ .venue-list{gap:23px}.venue{padding-top:17px;gap:9px}.venue-type h3{font-size:13px;margin-bottom:4px}.venue-type p{font-size:11px}
+ .venue-details h4{font-size:29px;margin-bottom:8px}.venue-details>p{font-size:11px;margin-bottom:13px}.venue-details a{font-size:12px;min-height:46px;padding:11px 15px}
+ .welcome-inner{min-height:0;padding-top:8px;padding-bottom:20px}.welcome-copy h2{font-size:64px}.welcome-art{margin-top:24px}
+ .welcome-footer{margin:0 26px;padding:20px 0 25px}
+}
+@media(max-width:360px){.locations{padding-inline:20px}.location-brand h1{font-size:27px}.location-brand img{width:35px}.venue-type{display:flex;flex-wrap:wrap;gap:4px 14px}.welcome-footer{margin-inline:20px}}

@@ -3,9 +3,22 @@ if (['#invitation', '#cinema', '#our-story', '#the-day'].includes(location.hash)
   location.replace('invite.html' + location.hash);
 }
 
+// Reveal complete scenes once. The default without JavaScript stays visible.
+if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  document.documentElement.classList.add('motion-ready');
+  const reveal = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      reveal.unobserve(entry.target);
+    });
+  }, {threshold:.12});
+  document.querySelectorAll('main > section').forEach(section => reveal.observe(section));
+}
+
 // Small pointer-driven depth; no continuous rendering loop or mobile scroll handler.
 const depth = matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)');
-const scene = document.querySelector('.welcome');
+const scene = document.querySelector('main');
 let frame = 0, x = 0, y = 0;
 const paint = () => {
   frame = 0;

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Vinayak and Aambadi//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:vinayak-aambadi-wedding-20270211@example.invalid
+DTSTAMP:20260923T180000Z
+DTSTART:20270211T040000Z
+DTEND:20270211T053000Z
+SUMMARY:Wedding of Vinayak and Aambadi
+DESCRIPTION:Muhurtham 9:50-10:20 am IST. Breakfast from 8:30 am.
+LOCATION:Sree Neelakeshi Kalyana Mandapam\, Marayamuttom\, Neyyattinkara\, Kerala
+END:VEVENT
+BEGIN:VEVENT
+UID:vinayak-aambadi-reception-20270211@example.invalid
+DTSTAMP:20260923T180000Z
+DTSTART:20270211T103000Z
+DTEND:20270211T143000Z
+SUMMARY:Vinayak and Aambadi — evening reception
+LOCATION:Sreeragam Convention Centre\, Neyyattinkara\, Kerala
+END:VEVENT
+END:VCALENDAR

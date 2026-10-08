@@ -1,0 +1,32 @@
+:root{--wine:#260711;--gold:#ebcb8e;--ivory:#fff3da}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--wine);color:var(--ivory);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+#ar-container{position:absolute;inset:0;overflow:hidden;isolation:isolate}
+#ar-container video,#ar-container canvas{position:absolute!important;inset:0}
+#ar-container video{object-fit:cover;z-index:0!important}
+#ar-container canvas{z-index:1!important}
+body:before{content:"";position:absolute;z-index:4;inset:0;background:linear-gradient(#16060ab8,transparent 24%,transparent 70%,#150609b8);pointer-events:none}
+.ar-header{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:calc(22px + env(safe-area-inset-top)) 25px 18px;pointer-events:none}
+.brand{font:400 35px/1 'Bodoni Moda',serif;letter-spacing:-.07em}
+.brand span{padding:0 8px;color:var(--gold);font:normal 12px 'DM Sans',sans-serif}
+.ar-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#f4d8a7}
+.camera-frame{position:absolute;z-index:6;inset:18% 11% 22%;pointer-events:none;transition:opacity .5s}
+.camera-frame span{position:absolute;width:38px;height:38px;color:var(--gold);filter:drop-shadow(0 2px 7px #0009)}
+.camera-frame span:nth-child(1){top:0;left:0;border-top:1px solid;border-left:1px solid}
+.camera-frame span:nth-child(2){top:0;right:0;border-top:1px solid;border-right:1px solid}
+.camera-frame span:nth-child(3){bottom:0;left:0;border-bottom:1px solid;border-left:1px solid}
+.camera-frame span:nth-child(4){bottom:0;right:0;border-bottom:1px solid;border-right:1px solid}
+body.is-found .camera-frame{opacity:0}
+.ar-status{position:absolute;z-index:12;top:calc(83px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);white-space:nowrap;padding:9px 18px;border:1px solid #ebcb8e66;border-radius:100px;background:#260711b8;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#f7dfaf;pointer-events:none}
+.scanning-help,.found-note{position:absolute;z-index:11;bottom:calc(42px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(90%,440px);text-align:center;text-shadow:0 2px 12px #000;pointer-events:none}
+.scan-glyph{display:block;font-size:32px;line-height:1;color:var(--gold)}
+.scanning-help p{margin:10px 0 6px;font:400 27px 'Bodoni Moda',serif}
+.scanning-help small{display:block;color:#ffebce;font-size:11px;line-height:1.5;letter-spacing:.02em}
+.found-note{padding:12px 20px;border-top:1px solid #ebcb8e99;border-bottom:1px solid #ebcb8e99;background:#26071193;font:400 22px 'Bodoni Moda',serif;letter-spacing:-.03em}
+.found-note span{padding:0 .12em;color:var(--gold);font-style:italic}
+.error-box{position:absolute;z-index:20;top:50%;left:50%;transform:translate(-50%,-50%);width:min(88%,440px);padding:31px 27px;border:1px solid #d9b674;background:#2d0b1a;color:var(--ivory);text-align:center;box-shadow:0 24px 65px #0008}
+.error-box h1{margin:0 0 12px;font:400 37px 'Bodoni Moda',serif}
+.error-box p{margin:0;font-size:13px;line-height:1.65;color:#f3dac1}
+@media(max-width:480px){.ar-header{padding-left:18px;padding-right:18px}.brand{font-size:29px}.ar-label{font-size:9px}.camera-frame{inset:18% 8% 23%}}
+@media(prefers-reduced-motion:reduce){.camera-frame{transition:none}}

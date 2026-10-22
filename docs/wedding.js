@@ -30,16 +30,16 @@
         const titleLines = scene.querySelectorAll('h1 .title-line > span, h2 .title-line > span');
         const details = scene.querySelectorAll('[data-reveal]');
         const illustration = scene.querySelector('.figure-arrival, .portal-art img, .blessing-art img, .swing-inner');
-        const disc = scene.querySelector('.portrait-disc, .art-medallion');
+        const setting = scene.querySelector('.portrait-setting');
         const tl = gsap.timeline({defaults:{duration:.65,ease:'power3.out'}});
         tl.addLabel('setting',0).addLabel('words',.12).addLabel('details',.38);
         if (index === 0) {
           tl.from(scene.querySelector('.world-layer'), {scale:1.045,opacity:.6,duration:1.35}, 'setting');
           tl.from(scene.querySelector('.scene-top'), {y:10,opacity:0,duration:.45}, 'setting+=.06');
         }
-        const light=scene.querySelector('.light-layer, .garden-glow, .portal-orbit');
+        const light=scene.querySelector('.light-layer, .garden-glow, .portal-light');
         if(light) tl.to(light,{opacity:.55,duration:2.2,repeat:1,yoyo:true,ease:'sine.inOut'},'setting+=.2');
-        if (disc) tl.from(disc,{scale:.87,rotation:-7,opacity:.2,duration:1.05},'setting');
+        if (setting) tl.from(setting,{scale:1.04,opacity:0,duration:1.05},'setting');
         if (illustration) tl.from(illustration,{y:25,scale:.975,opacity:0,duration:1.05},'setting+=.12');
         if (titleLines.length) tl.from(titleLines,{yPercent:110,rotationX:-8,stagger:.13,duration:.95},'words');
         if (details.length) tl.from(details,{y:13,opacity:0,stagger:{each:.065,amount:Math.min(.4,details.length*.065)},duration:.65},'details');

@@ -34,7 +34,8 @@
         const tl = gsap.timeline({defaults:{duration:.65,ease:'power3.out'}});
         tl.addLabel('setting',0).addLabel('words',.12).addLabel('details',.38);
         if (index === 0) {
-          tl.from(scene.querySelector('.world-layer'), {scale:1.045,opacity:.6,duration:1.35}, 'setting');
+          const backdrop=scene.querySelector('.world-layer');
+          if(backdrop) tl.from(backdrop, {scale:1.045,opacity:.6,duration:1.35}, 'setting');
           tl.from(scene.querySelector('.scene-top'), {y:10,opacity:0,duration:.45}, 'setting+=.06');
         }
         const light=scene.querySelector('.light-layer, .garden-glow, .portal-light');
@@ -89,54 +90,4 @@
     });
   }
 
-  // A naturally playing film avoids expensive scroll-by-scroll video seeking.
-  const video=document.querySelector('.wedding-film');
-  if (video) {
-    const button=document.querySelector('.film-toggle');
-    const mobile=matchMedia('(max-width:700px)');
-    let inView=false, manuallyPaused=false, loaded=false, failed=false;
-    const dataSaving=!!navigator.connection?.saveData;
-    if (dataSaving || reduced.matches) manuallyPaused=true;
-    const label=()=>{
-      const paused=video.paused || manuallyPaused;
-      button.innerHTML=paused?'Play film <span aria-hidden="true">▷</span>':'Pause film <span aria-hidden="true">Ⅱ</span>';
-      button.setAttribute('aria-label',paused?'Play wedding film':'Pause wedding film');
-    };
-    const prepare=()=>{
-      const poster=mobile.matches?video.dataset.mobilePoster:'assets/ceremony-film-desktop-poster.webp';
-      video.poster=poster;
-      if (loaded) return;
-      video.src=mobile.matches?video.dataset.mobile:video.dataset.desktop;
-      video.muted=true;video.loop=true;video.load();loaded=true;
-    };
-    const sync=()=>{
-      if (inView && !manuallyPaused && !document.hidden && !failed) {
-        prepare();
-        video.play().then(label).catch(error=>{if(error.name!=='AbortError' && inView)manuallyPaused=true;label();});
-      } else {video.pause();label();}
-    };
-    video.poster=mobile.matches?video.dataset.mobilePoster:video.poster;
-    if ('IntersectionObserver' in window) {
-      const preload=new IntersectionObserver(entries=>{
-        if (!entries.some(entry=>entry.isIntersecting)) return;
-        if (!dataSaving && !reduced.matches) prepare();
-        preload.disconnect();
-      },{rootMargin:'600px 0px'});
-      preload.observe(video);
-      const visibility=new IntersectionObserver(([entry])=>{inView=entry.isIntersecting;sync();},{threshold:.01});
-      visibility.observe(video);
-    } else {inView=true;sync();}
-    button.addEventListener('click',()=>{
-      manuallyPaused=!manuallyPaused;
-      if (!manuallyPaused) {prepare();video.style.visibility='visible';}
-      sync();
-    });
-    video.addEventListener('play',label);video.addEventListener('pause',label);
-    video.addEventListener('error',()=>{failed=true;button.hidden=true;video.removeAttribute('src');video.load();});
-    mobile.addEventListener('change',()=>{loaded=false;video.pause();video.poster=mobile.matches?video.dataset.mobilePoster:'assets/ceremony-film-desktop-poster.webp';if(!manuallyPaused)prepare();sync();});
-    reduced.addEventListener('change',()=>{if(reduced.matches)manuallyPaused=true;sync();});
-    document.addEventListener('visibilitychange',sync);
-    window.addEventListener('pagehide',()=>video.pause());
-    label();
-  }
 })();

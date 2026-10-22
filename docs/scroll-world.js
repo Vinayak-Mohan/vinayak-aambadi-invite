@@ -114,7 +114,7 @@
       cache.forEach(close);cache.clear();pending.clear();blobs.clear();failed.clear();prefetching=false;
       stage.classList.remove('world-painted');
       try {
-        const response=await fetch('assets/kerala-journey/manifest.json');
+        const response=await fetch('assets/kerala-real-quality-v1/manifest.json?v=20261023-real-final');
         if(!response.ok) return;
         const manifest=await response.json();if(generation!==epoch || preference.matches) return;
         config=phone.matches?manifest.mobile:manifest.desktop;

@@ -4,9 +4,9 @@
 .scroll-world{overflow:clip;pointer-events:none;background:#24101e}
 .home-world{position:fixed;inset:0;z-index:0;height:100svh}
 .world-poster,.world-poster img,.scroll-world canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.scroll-world canvas{opacity:0;transition:opacity .7s ease}
+.scroll-world canvas{opacity:0;transition:opacity .2s ease}
 .scroll-world.world-painted canvas{opacity:1}
-.scroll-world.world-painted .world-poster{opacity:0;transition:opacity .7s ease}
+.scroll-world.world-painted .world-poster{opacity:0;transition:opacity .2s ease}
 .home-world:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#2a0b1bc7,transparent 72%),linear-gradient(0deg,#2a0b1b9c,transparent 55%)}
 .home-page .location-opening{grid-template-rows:auto 1fr auto;padding-bottom:60px;--next-colour:transparent}
 .home-page .location-opening:after{height:0}
@@ -24,7 +24,7 @@
 .blessing-copy,.together-copy{position:relative;z-index:4}
 .story-portrait{z-index:2}
 .together:before{content:'';position:absolute;z-index:-1;inset:0 0 auto;height:150px;background:linear-gradient(#17392f,transparent);pointer-events:none}
-.lamp-film{min-height:110svh;--next-colour:#17392f}
+.lamp-film{min-height:100svh;--next-colour:#17392f}
 .lamp-film .film-media{inset:0}
 .lamp-film .film-shade{background:linear-gradient(90deg,#24101ee0,#24101e80 45%,transparent 80%),linear-gradient(0deg,#17392f,transparent 30%,#491d2c44)}
 .lamp-film .film-copy{max-width:56%}

@@ -1,7 +1,7 @@
-import {FramePlayhead} from './frame-playhead.mjs';
+import {FramePlayhead} from './frame-playhead.mjs?v=20261024-direct';
 
-/* Native scrolling remains immediate. Films catch up through adjacent frames.
-   Missing frames hold the last picture without advancing an invisible playhead. */
+/* The latest scroll position chooses the frame directly, at display refresh rate.
+   Decoders may finish later, but can only draw the latest requested position. */
 const preference = matchMedia('(prefers-reduced-motion: reduce)');
 const economical = navigator.connection?.saveData || /(^|-)2g$/.test(navigator.connection?.effectiveType || '');
 const clamp = value => Math.max(0, Math.min(1, value));
@@ -42,7 +42,8 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
   function update() {
     const before = target;
     if (stage.dataset.world === 'page') {
-      target = clamp(scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight));
+      const range = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      target = range-scrollY < 1 ? 1 : scrollY < .5 ? 0 : clamp(scrollY/range);
     } else {
       const rect = scene.getBoundingClientRect();
       target = clamp((innerHeight - rect.top) / (innerHeight + rect.height));
@@ -52,19 +53,19 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
   }
   function trimCache() {
     if (!playhead || !config) return;
-    const current = Math.floor(playhead.position / config.perSheet);
+    const current = Math.floor(target*(config.frames-1) / config.perSheet);
     const keys = [...cache.keys()].sort((a,b) => Math.abs(b-current)-Math.abs(a-current));
     for (const key of keys) if (cache.size > 3 && key !== current) {
       close(cache.get(key)); cache.delete(key);
     }
   }
-  function request(index) {
+  function request(index, priority = 'low') {
     if (!config || index < 0 || index >= config.sheets.length || cache.has(index) || pending.has(index)) return;
     if ((failures.get(index)?.until || 0) > performance.now() || pending.size >= 2) return;
     const generation = epoch, controller = new AbortController(), url = config.sheets[index];
     const task = {controller}; pending.set(index, task);
     (async () => {
-      const response = await fetch(url, {cache:'force-cache', priority:'low', signal:controller.signal});
+      const response = await fetch(url, {cache:'force-cache', priority, signal:controller.signal});
       if (!response.ok) throw Error('Film frames unavailable');
       const blob = await response.blob();
       let image;
@@ -74,10 +75,10 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
         try {image = new Image(); image.src = objectURL; await image.decode();}
         finally {URL.revokeObjectURL(objectURL);}
       }
-      if (generation !== epoch || preference.matches) {close(image); return;}
+      if (generation !== epoch || preference.matches || task.cancelled) {close(image); return;}
       cache.set(index, image); failures.delete(index); trimCache(); needsPaint = true;
     })().catch(error => {
-      if (generation === epoch && error.name !== 'AbortError') {
+      if (generation === epoch && !task.cancelled && error.name !== 'AbortError') {
         const count = (failures.get(index)?.count || 0) + 1;
         failures.set(index, {count, until:performance.now() + Math.min(15000, 1000 * 2 ** count)});
         clearTimeout(retryTimer);
@@ -91,7 +92,7 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
   function available(position) {
     const first = Math.floor(position), second = Math.min(config.frames-1, Math.ceil(position));
     const a = Math.floor(first / config.perSheet), b = Math.floor(second / config.perSheet);
-    request(a); request(b);
+    request(a, 'high'); request(b, 'high');
     return cache.has(a) && cache.has(b);
   }
   function drawFrame(frame, alpha) {
@@ -110,6 +111,12 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
     const elapsed = now - (last || now-16.667); last = now;
     const destination = target*(config.frames-1);
     const travelDirection = Math.sign(destination-playhead.position) || direction;
+    const currentSheet = Math.floor(destination/config.perSheet);
+    const neighbourSheet = Math.floor(Math.ceil(destination)/config.perSheet);
+    const keep = new Set([currentSheet, neighbourSheet, currentSheet+travelDirection]);
+    pending.forEach((task,index) => {
+      if (!keep.has(index)) {task.cancelled = true; task.controller.abort(); pending.delete(index);}
+    });
     const proposed = playhead.next(destination, elapsed);
     const ready = available(proposed);
     if (ready && (needsPaint || proposed !== playhead.position)) {
@@ -120,16 +127,15 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
       ctx.globalAlpha = 1; needsPaint = false;
       stage.classList.add('world-painted'); canvas.dataset.frame = String(frame);
       if (debug) {
+        canvas.dataset.target = destination.toFixed(3);
         const trace = (canvas.dataset.trace || '').split(',').filter(Boolean);
         if (Number(trace.at(-1)) !== frame || !trace.length) trace.push(String(frame));
         canvas.dataset.trace = trace.slice(-512).join(',');
       }
     }
-    const sheet = Math.floor(playhead.position/config.perSheet);
-    request(sheet + travelDirection);
+    request(currentSheet + travelDirection);
     trimCache();
-    // A pending decoder wakes the renderer. Buffering never runs a busy loop.
-    if (ready && Math.abs(destination-playhead.position) > 0.001) schedule();
+    // Stop here. Only fresh scroll/resize input or a completed decoder may repaint.
   }
   function release() {
     epoch++;

@@ -21,7 +21,12 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
   const ctx = canvas?.getContext('2d', {alpha:false});
   if (!ctx) return;
   const phone = matchMedia('(max-width:700px)');
+  // Keep the small compressed film, rather than downloading the same atlas again
+  // whenever a quick swipe leaves the decoded window. Only three atlases are decoded.
   const cache = new Map(), pending = new Map(), failures = new Map();
+  const compressed = new Map(), downloads = new Map();
+  const previews = new Map(), previewFailures = new Set();
+  let previewBusy = false;
   const scene = stage.closest('.scene');
   let config, playhead, epoch = 0, active = false, raf = 0, last = 0;
   let target = 0, width = 0, height = 0, lastWidth = innerWidth, direction = 1;
@@ -59,15 +64,76 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
       close(cache.get(key)); cache.delete(key);
     }
   }
+  function filmBlob(index, priority = 'low') {
+    if (compressed.has(index)) return Promise.resolve(compressed.get(index));
+    if (downloads.has(index)) return downloads.get(index).promise;
+    const generation = epoch, controller = new AbortController();
+    const task = {controller};
+    task.promise = (async () => {
+      const response = await fetch(config.sheets[index], {cache:'force-cache', priority, signal:controller.signal});
+      if (!response.ok) throw Error('Film frames unavailable');
+      const blob = await response.blob();
+      if (generation === epoch) {compressed.set(index, blob); warmPreviews();}
+      return blob;
+    })().finally(() => {if (downloads.get(index) === task) downloads.delete(index);});
+    downloads.set(index, task);
+    return task.promise;
+  }
+  async function warmPreviews() {
+    if (previewBusy || !config || !active || document.hidden || preference.matches || !('createImageBitmap' in window)) return;
+    const current = Math.floor(target*(config.frames-1)/config.perSheet);
+    const index = [...compressed.keys()].filter(index => !previews.has(index) && !previewFailures.has(index))
+      .sort((a,b) => Math.abs(a-current)-Math.abs(b-current))[0];
+    if (index === undefined) return;
+    const generation = epoch, film = config;
+    const tileWidth = Math.min(film.width, phone.matches ? 160 : 284);
+    const tileHeight = Math.round(tileWidth*film.height/film.width);
+    previewBusy = true;
+    try {
+      // A complete lightweight tier makes distant frames immediately drawable.
+      // Full detail replaces it at the SAME position, without a playback queue.
+      const image = await createImageBitmap(compressed.get(index), {
+        resizeWidth:tileWidth*film.columns,
+        resizeHeight:tileHeight*Math.ceil(film.perSheet/film.columns),
+        resizeQuality:'low'
+      });
+      if (generation !== epoch) {close(image); return;}
+      previews.set(index, {image,width:tileWidth,height:tileHeight});
+      if (debug) canvas.dataset.preparedSheets = String(previews.size);
+      needsPaint = true; schedule();
+    } catch {
+      if (generation === epoch) previewFailures.add(index);
+      // Full-detail decoding remains available on unsupported browsers.
+    }
+    finally {
+      if (generation === epoch) {previewBusy = false; warmPreviews();}
+    }
+  }
+  function warmFilm() {
+    if (!active || !config || document.hidden || preference.matches) return;
+    const current = Math.floor(target*(config.frames-1)/config.perSheet);
+    const candidates = config.sheets.map((_,index) => index).sort((a,b) => {
+      const distance = index => Math.abs(index-current) + (Math.sign(index-current) === direction ? 0 : .5);
+      return distance(a)-distance(b);
+    });
+    // Background transfers are bounded and lower priority than the visible frame.
+    for (const index of candidates) {
+      if (downloads.size >= 2) break;
+      if (compressed.has(index) || downloads.has(index) || (failures.get(index)?.until || 0) > performance.now()) continue;
+      const generation = epoch;
+      filmBlob(index).catch(() => {
+        if (generation === epoch) failures.set(index, {count:1,until:performance.now()+2000});
+      }).finally(() => {if (generation === epoch) warmFilm();});
+    }
+  }
   function request(index, priority = 'low') {
     if (!config || index < 0 || index >= config.sheets.length || cache.has(index) || pending.has(index)) return;
     if ((failures.get(index)?.until || 0) > performance.now() || pending.size >= 2) return;
-    const generation = epoch, controller = new AbortController(), url = config.sheets[index];
-    const task = {controller}; pending.set(index, task);
+    const generation = epoch;
+    const task = {}; pending.set(index, task);
     (async () => {
-      const response = await fetch(url, {cache:'force-cache', priority, signal:controller.signal});
-      if (!response.ok) throw Error('Film frames unavailable');
-      const blob = await response.blob();
+      const blob = await filmBlob(index, priority);
+      if (generation !== epoch || preference.matches || task.cancelled) return;
       let image;
       if ('createImageBitmap' in window) image = await createImageBitmap(blob);
       else {
@@ -93,17 +159,22 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
     const first = Math.floor(position), second = Math.min(config.frames-1, Math.ceil(position));
     const a = Math.floor(first / config.perSheet), b = Math.floor(second / config.perSheet);
     request(a, 'high'); request(b, 'high');
-    return cache.has(a) && cache.has(b);
+    return (cache.has(a) || previews.has(a)) && (cache.has(b) || previews.has(b));
   }
   function drawFrame(frame, alpha) {
-    const image = cache.get(Math.floor(frame / config.perSheet));
+    const sheet = Math.floor(frame / config.perSheet);
+    const preview = previews.get(sheet);
+    const detailed = cache.has(sheet);
+    const image = detailed ? cache.get(sheet) : preview.image;
+    const tileWidth = detailed ? config.width : preview.width;
+    const tileHeight = detailed ? config.height : preview.height;
     const local = frame % config.perSheet;
     const scale = phone.matches ? Math.min(width/config.width, height/config.height) : Math.max(width/config.width, height/config.height);
     const dw = config.width*scale, dh = config.height*scale;
     ctx.globalAlpha = alpha;
     if (alpha === 1) {ctx.fillStyle = '#24101e'; ctx.fillRect(0,0,width,height);}
-    ctx.drawImage(image, (local%config.columns)*config.width, Math.floor(local/config.columns)*config.height,
-      config.width, config.height, (width-dw)/2, (height-dh)/2, dw, dh);
+    ctx.drawImage(image, (local%config.columns)*tileWidth, Math.floor(local/config.columns)*tileHeight,
+      tileWidth, tileHeight, (width-dw)/2, (height-dh)/2, dw, dh);
   }
   function paint(now) {
     raf = 0;
@@ -115,7 +186,7 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
     const neighbourSheet = Math.floor(Math.ceil(destination)/config.perSheet);
     const keep = new Set([currentSheet, neighbourSheet, currentSheet+travelDirection]);
     pending.forEach((task,index) => {
-      if (!keep.has(index)) {task.cancelled = true; task.controller.abort(); pending.delete(index);}
+      if (!keep.has(index)) {task.cancelled = true; pending.delete(index);}
     });
     const proposed = playhead.next(destination, elapsed);
     const ready = available(proposed);
@@ -134,13 +205,17 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
       }
     }
     request(currentSheet + travelDirection);
+    warmFilm();
+    warmPreviews();
     trimCache();
     // Stop here. Only fresh scroll/resize input or a completed decoder may repaint.
   }
   function release() {
     epoch++;
     if (raf) cancelAnimationFrame(raf); raf = 0; last = 0;
-    pending.forEach(task => task.controller.abort()); pending.clear();
+    pending.forEach(task => {task.cancelled = true;}); pending.clear();
+    downloads.forEach(task => task.controller.abort()); downloads.clear(); compressed.clear();
+    previews.forEach(preview => close(preview.image)); previews.clear(); previewFailures.clear(); previewBusy = false;
     cache.forEach(close); cache.clear(); failures.clear();
     clearTimeout(retryTimer); config = undefined;
     // Retain canvas pixels to avoid flashing an old poster when revisiting.

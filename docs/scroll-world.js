@@ -41,6 +41,9 @@ if (!economical) document.querySelectorAll('.scroll-world[data-manifest]').forEa
     height = Math.max(1, Math.round(rect.height * ratio));
     stage.style.setProperty('--world-inset', Math.max(0, (rect.height - rect.width * 16 / 9) / 2) + 'px');
     if (canvas.width !== width || canvas.height !== height) {
+      // Resizing clears an opaque canvas to black. Keep the poster visible until
+      // a frame for the new dimensions has actually been painted.
+      stage.classList.remove('world-painted');
       canvas.width = width; canvas.height = height; needsPaint = true;
     }
   }

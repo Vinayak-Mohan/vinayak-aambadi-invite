@@ -1,0 +1,9 @@
+# Generated illustration prompts
+
+Source reference: user-provided couple photo, used only to guide hair, appearance and proportions.
+
+## Walking together
+Create a premium transparent cutout illustration for a Kerala wedding invitation, based on the attached couple's appearance, hair and body proportions. Full-length couple walking away from viewer holding hands, both faces completely hidden. Groom clean-shaven in ivory Kerala kurta and traditional white mundu, only horizontal kasavu gold border at bottom hem, no vertical gold stripe on rear. Bride in ivory kasavu sari with maroon blouse, gold jewellery, black hair in low jasmine-adorned bun. A tender natural pose, feet anatomically correct and completely visible. Sophisticated painterly realism, soft golden morning light, exquisitely detailed fabric, restrained elegant texture, muted ivory, maroon and gold. Entire figures fit inside canvas with clear space all around. Transparent background; no floor, no scenery, no lettering, no logos.
+
+## Together
+Create a premium transparent cutout illustration for a Kerala wedding invitation, based on the attached couple's appearance, hair and body proportions. Full-length couple viewed from a rear three-quarter angle, bride leaning her head on groom's shoulder, standing close with hands gently intertwined; both faces completely hidden. Groom clean-shaven in ivory traditional kurta and white Kerala mundu with horizontal kasavu gold border only at bottom hem, no vertical gold stripe on rear. Bride in rich muted maroon silk sari with antique gold border, gold jewellery and jasmine in her low black bun. Natural anatomy, full bodies and feet visible, no furniture. Elegant cinematic painterly realism, soft warm light, refined handcrafted detail; transparent background, no scenery, no typography, no logos.

@@ -53,17 +53,22 @@ h2 span{display:block}h3{font:500 40px/1.05 var(--serif)}
 .memory-copy{position:relative;z-index:4}.memory-copy p:last-child{max-width:37ch;margin-top:28px}
 .swing{position:relative;z-index:3;height:min(70svh,700px);width:100%;transform-origin:50% 0}
 .swing img{height:100%;width:100%;object-fit:contain;transform-origin:50% 0;mask-image:linear-gradient(transparent,#000 8%)}
-/* Text remains inside the quiet centre of each unwarped illustration. */
-.celebrations{padding:80px 6vw 90px;text-align:center}
-.celebrations header>p:last-child{margin-top:15px;font:italic 24px/1.4 var(--serif)}
-.event-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:34px;max-width:920px;margin:42px auto 0}
-.event{position:relative;isolation:isolate;aspect-ratio:2/3;display:grid;place-items:center;min-width:0}
-.event-art{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:contain;mask-image:linear-gradient(90deg,transparent,#000 2%,#000 98%,transparent),linear-gradient(transparent,#000 2%,#000 98%,transparent);mask-composite:intersect}
-.event-copy{position:relative;width:64%;padding:30px 0 42px}
-.event-date{font-size:13px;margin-bottom:20px}.event-time{margin-top:17px;font-size:20px}
-.event-copy>p{line-height:1.5}.event-copy .small{margin-top:8px}.event-copy .fine-ornament{margin:18px 0}
-.event-copy a{display:inline-flex;align-items:center;min-height:44px;margin-top:15px;font-size:14px}
-.breakfast{font-size:15px;margin:28px auto 10px}.calendar{display:inline-flex;min-height:44px;align-items:center}
+/* Both venues share one calm, readable page. */
+.celebrations{display:flex;align-items:center;justify-content:center;padding:75px 8vw;min-height:100svh;text-align:left;background:var(--paper)}
+.celebrations-inner{position:relative;z-index:4;width:min(100%,1000px)}
+.celebrations header{text-align:center}.celebration-date{font-size:15px;color:var(--soft);margin-bottom:20px}
+.celebrations h2{font-size:clamp(48px,5vw,72px)}
+.event-grid{display:grid;grid-template-columns:1fr 1fr;margin:60px 0 48px;gap:0}
+.event{position:relative;min-width:0;padding:0 42px}
+.event:first-child{padding-left:0}.event:last-child{padding-right:0;border-left:1px solid #9d773d40}
+.event-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:22px}
+.event-heading h3{font:500 15px/1.4 var(--sans);color:var(--soft)}.event-heading p{font-size:16px;white-space:nowrap}
+.event h4{font:500 clamp(32px,3vw,42px)/1.08 var(--serif);letter-spacing:-.02em;margin:0 0 16px}
+.event-address{font-size:15px;color:var(--soft)}
+.event>a{display:inline-flex;align-items:center;gap:9px;min-height:44px;margin-top:14px;font-size:14px;text-decoration-thickness:1px}
+.event>a svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.events-meta{display:flex;justify-content:space-between;align-items:center;gap:24px;border-top:1px solid #9d773d40;padding-top:23px;font-size:14px}
+.events-meta p{line-height:1.65}.events-meta p span{color:var(--soft)}.calendar{display:inline-flex;align-items:center;min-height:44px;white-space:nowrap}
 .closing{display:grid;place-items:center;text-align:center;padding:90px 24px 210px;min-height:100svh}
 .closing-setting{position:absolute;z-index:-3;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32;mask-image:linear-gradient(transparent,#000 45%,transparent)}
 .closing-copy{position:relative;z-index:4}.closing-copy .signature{margin-top:30px}.closing-copy>p:last-of-type{font-size:14px;margin-top:12px}.closing-copy>a{display:inline-flex;align-items:center;min-height:44px;margin-top:20px;font-size:14px}
@@ -83,7 +88,7 @@ h2 span{display:block}h3{font:500 40px/1.05 var(--serif)}
  }
 }
 @media(prefers-reduced-motion:no-preference){.in-view .swing img{animation:sway 8s ease-in-out infinite alternate}@keyframes sway{from{rotate:-.65deg}to{rotate:.65deg}}}
-@media(max-width:1000px) and (min-width:701px){.letter,.memory{padding-inline:8vw;gap:3vw}.letter-copy h2{font-size:52px}.event-grid{max-width:820px}.event-copy{width:62%}h3{font-size:35px}}
+@media(max-width:1000px) and (min-width:701px){.letter,.memory{padding-inline:8vw;gap:3vw}.letter-copy h2{font-size:52px}.event{padding-inline:26px}.event-heading{flex-direction:column;gap:5px}h3{font-size:35px}}
 @media(max-width:700px){
  body{font-size:15px}
  .scene{min-height:100svh}h2{font-size:clamp(43px,11.8vw,58px)}
@@ -106,13 +111,42 @@ h2 span{display:block}h3{font:500 40px/1.05 var(--serif)}
  .memory-copy h2{font-size:clamp(45px,12vw,58px)}.memory-copy p:last-child{margin-top:22px}
  .memory-setting img{object-position:65% center}.memory-wash{background:linear-gradient(var(--paper),#eddfc5b8 30%,#eddfc518 65%,var(--paper))}
  .swing{height:49svh;min-height:310px;max-height:480px;width:100%;flex:none}
- .celebrations{padding:65px 5vw 75px}.celebrations header h2{font-size:49px}.celebrations header>p:last-child{font-size:22px}
- .event-grid{grid-template-columns:1fr;gap:28px;max-width:390px;margin-top:30px}
- .event-copy{width:64%;padding:24px 0 36px}.event h3{font-size:clamp(32px,9.5vw,38px)}
- .event-copy p{font-size:15px}.event-copy .event-time{font-size:19px}.event-copy .event-date{font-size:12px;margin-bottom:15px}.event-copy .small{font-size:13px}.event-copy .fine-ornament{margin:12px 0}.event-copy a{font-size:13px;margin-top:8px}
+ .celebrations{padding:42px 7vw;min-height:100svh}.celebrations h2{font-size:clamp(40px,11.3vw,49px)}.celebration-date{font-size:13px;margin-bottom:15px}
+ .event-grid{grid-template-columns:1fr;margin:34px 0 24px;gap:25px}
+ .event,.event:first-child,.event:last-child{padding:0;border:0}.event:last-child{border-top:1px solid #9d773d40;padding-top:25px}
+ .event-heading{margin-bottom:12px;gap:8px}.event-heading h3{font-size:13px}.event-heading p{font-size:15px}
+ .event h4{font-size:31px;margin-bottom:10px}.event-address{font-size:13px}.event>a{margin-top:5px;font-size:13px}
+ .events-meta{font-size:12px;padding-top:16px;gap:16px}.events-meta p span{display:none}.calendar{font-size:13px}
  .closing{padding:65px 24px 200px}.closing h2{font-size:58px}.closing-ritual{width:min(90vw,480px)}
 }
-@media(max-width:370px){.event-copy{width:64%;padding-bottom:30px}.event h3{font-size:31px}.event-copy p{font-size:14px}.event-copy .event-date{font-size:11px;margin-bottom:10px}.event-copy .event-time{font-size:18px;margin-top:12px}.event-copy .fine-ornament{margin:8px 0}.event-copy .small{font-size:12px}.event-copy a{font-size:12px;margin-top:4px}.cover h1{font-size:60px}}
+@media(max-width:370px){.cover h1{font-size:60px}.event-heading{gap:5px}.event-heading h3{font-size:12px}.event-heading p{font-size:14px}.event h4{font-size:28px}}
+@media(max-height:740px) and (max-width:700px){.celebrations{padding-block:28px}.celebrations h2{font-size:39px}.celebration-date{margin-bottom:12px}.event-grid{margin:24px 0 18px;gap:18px}.event:last-child{padding-top:18px}.event-heading{margin-bottom:9px}.event h4{font-size:28px;margin-bottom:8px}.event-address{font-size:12px}.event>a{min-height:40px;margin-top:3px}.events-meta{padding-top:12px}}
 @media(max-height:740px) and (max-width:700px){.cover-copy{padding-top:5svh}.cover h1{font-size:60px}.cover-copy .eyebrow{margin-bottom:12px}.date{margin-top:15px;font-size:21px}.cover-couple{height:33svh;min-height:195px;bottom:10svh}.open-letter{bottom:10px}.letter,.memory{padding-block:50px 65px}.light-story{min-height:760px}}
 @media(max-height:640px) and (max-width:700px){.cover{min-height:540px}.cover-copy{padding-top:25px}.cover h1{font-size:52px}.cover-copy .eyebrow{font-size:11px;line-height:1.45}.cover-couple{height:31svh;min-height:185px}.cover-copy .small{font-size:12px}.cover h1 i{margin:6px 0 8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important}.film canvas{display:none}.world-poster{opacity:1!important}}
+/* An embossed invitation seal opens the two paper leaves on deliberate tap. */
+.invite-gate[hidden]{display:none}
+.invite-gate{position:fixed;inset:0;z-index:50;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;place-items:center;color:var(--ink);perspective:1400px}
+.invitation-sealed,.invitation-sealed body{overflow:hidden;overscroll-behavior:none}
+.invitation-sealed .skip{display:none}
+.gate-panel{position:absolute;top:0;bottom:0;width:50.1%;z-index:-1;transition:transform .85s cubic-bezier(.22,1,.36,1);backface-visibility:hidden}
+.gate-panel-left{left:0;background:linear-gradient(95deg,#e7d5b7,#f2e5cd 88%,#d6bd94);transform-origin:left center;box-shadow:8px 0 35px #76522a10}
+.gate-panel-right{right:0;background:linear-gradient(265deg,#e7d5b7,#f2e5cd 88%,#e2cca8);transform-origin:right center}
+.gate-panel::after{content:'';position:absolute;inset:22px;border:1px solid #98733b33;pointer-events:none}.gate-panel-left::after{right:-1px;border-right:0}.gate-panel-right::after{left:-1px;border-left:0}
+.gate-heading{position:absolute;z-index:2;top:19svh;left:20px;right:20px;text-align:center;transition:opacity .25s,transform .45s}
+.gate-heading>p{font-size:13px;color:var(--soft);margin-bottom:16px}.gate-heading h2{font:500 clamp(32px,4vw,50px)/1.15 var(--serif);letter-spacing:-.025em}.gate-heading h2 i{font-weight:400;font-size:.8em}.gate-heading time{display:block;font-size:14px;margin-top:13px;color:var(--soft)}
+.invitation-seal{position:absolute;top:50%;left:50%;translate:-50% -50%;width:150px;height:150px;border-radius:50%;border:1px solid #aa854b;background:radial-gradient(circle at 35% 25%,#793d49,#552431 65%,#361822);padding:9px;cursor:pointer;box-shadow:inset 0 0 0 4px #6c3940,inset 0 0 0 5px #c3a06a70,0 12px 30px #50392723,0 2px 5px #50392735;transition:opacity .25s,scale .25s}
+.invitation-seal:focus-visible{outline:2px solid var(--ink);outline-offset:9px}.invitation-seal:active{scale:.97}
+.seal-face{position:relative;width:100%;height:100%;border:1px solid #c8a56d70;border-radius:50%;overflow:hidden;display:grid;place-items:center}
+.seal-face img{position:absolute;width:190px;height:152px;max-width:none;object-fit:contain;filter:drop-shadow(0 1px 1px #35151c)}
+.seal-light{position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,#ffedbb25 49%,#fff7d544 50%,transparent 59%);transform:translateX(-100%);pointer-events:none}
+.gate-prompt{position:absolute;top:calc(50% + 108px);left:24px;right:24px;text-align:center;font:500 24px/1.35 var(--serif);transition:opacity .25s,transform .45s}.gate-prompt span{display:block;margin-top:11px;color:var(--soft);font:13px/1.5 var(--sans)}
+.invite-gate.opening{pointer-events:none}.opening .gate-panel-left{transform:translateX(-103%) rotateY(-10deg)}.opening .gate-panel-right{transform:translateX(103%) rotateY(10deg)}.opening .invitation-seal{opacity:0;scale:1.1}.opening .gate-heading,.opening .gate-prompt{opacity:0;transform:translateY(-8px)}
+@media(prefers-reduced-motion:no-preference){.invite-gate:not(.opening) .invitation-seal{animation:seal-breathe 4.5s ease-in-out infinite}.invite-gate:not(.opening) .seal-light{animation:seal-foil 6s ease-in-out infinite}@keyframes seal-breathe{50%{box-shadow:inset 0 0 0 4px #6c3940,inset 0 0 0 5px #c3a06a70,0 15px 35px #50392730,0 2px 5px #50392735}}@keyframes seal-foil{0%,40%{transform:translateX(-100%)}70%,100%{transform:translateX(100%)}}}
+@media(max-height:650px){.gate-heading{top:13svh}.gate-heading>p{margin-bottom:10px}.gate-heading time{margin-top:10px}.invitation-seal{width:132px;height:132px}.seal-face img{width:170px;height:136px}.gate-prompt{top:calc(50% + 91px)}}
+@media(prefers-reduced-motion:reduce){.gate-panel{transition:opacity .15s}.opening .gate-panel{transform:none;opacity:0}.invitation-seal,.gate-heading,.gate-prompt{transition:opacity .15s}}
+@media(min-width:701px) and (max-height:760px){.celebrations{padding-block:38px}.celebrations h2{font-size:56px}.celebration-date{margin-bottom:15px}.event-grid{margin:34px 0 27px}.event-heading{margin-bottom:15px}.event h4{font-size:36px}.events-meta{padding-top:16px}}
+@media(max-width:700px){.celebration-date{font-size:14px}.event-heading h3{font-size:14px}.event-heading p{font-size:16px}.event-address{font-size:14px}.event>a{font-size:14px}.events-meta{font-size:13px}.calendar{font-size:14px}}
+@media(max-width:370px), (max-height:740px) and (max-width:700px){.celebration-date{font-size:13px}.event-heading h3{font-size:13px}.event-heading p{font-size:15px}.event-address{font-size:13px}.events-meta{font-size:12px}.calendar{font-size:13px}}
+@media(max-width:700px){.light-copy h2{font-size:clamp(40px,11.2vw,50px)}}
+@media(max-width:370px) and (max-height:640px){.celebrations{padding-block:12px}.event-grid{margin:20px 0 14px;gap:16px}.event:last-child{padding-top:16px}.event-heading{margin-bottom:8px}.event h4{font-size:27px}.events-meta{padding-top:10px}}

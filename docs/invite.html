@@ -5,10 +5,16 @@
 <meta name="description" content="With joyful hearts, join Vinayak and Aambadi in Kerala on 11 February 2027.">
 <link rel="icon" href="favicon.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Source+Sans+3:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="heritage.css?v=2"><script defer src="vendor/gsap.min.js"></script><script defer src="heritage.js?v=2"></script><script type="module" src="scroll-world.js?v=20261101-viewport-poster"></script>
+<link rel="stylesheet" href="heritage.css?v=3"><script defer src="vendor/gsap.min.js"></script><script defer src="heritage.js?v=3"></script><script type="module" src="scroll-world.js?v=20261101-viewport-poster"></script>
 </head><body>
 <a class="skip" href="#the-day">Skip to wedding details</a>
-<main>
+<section class="invite-gate" id="entrance" aria-labelledby="gate-title" hidden>
+<div class="gate-panel gate-panel-left" aria-hidden="true"></div><div class="gate-panel gate-panel-right" aria-hidden="true"></div>
+<div class="gate-heading"><p>A celebration of love</p><h2 id="gate-title">Vinayak <i>&amp;</i> Aambadi</h2><time datetime="2027-02-11">11 February 2027</time></div>
+<button class="invitation-seal" type="button" aria-label="Open the wedding invitation"><span class="seal-face"><img src="assets/jasmine-love-monogram-small.webp" width="300" height="240" alt=""><span class="seal-light" aria-hidden="true"></span></span></button>
+<p class="gate-prompt">Open our invitation<span>Made with love, just for you.</span></p>
+</section>
+<main id="invitation-content">
 <section class="scene cover" id="top" aria-labelledby="names">
 <picture class="cover-landscape"><source media="(max-width:700px)" srcset="assets/heritage-v2/cover-phone.webp 640w, assets/heritage-v2/cover-portrait.webp 1024w" sizes="100vw"><img class="setting" src="assets/heritage-v2/cover-wide.webp" alt="" width="1536" height="1024" fetchpriority="high"></picture>
 <div class="cover-wash" aria-hidden="true"></div>
@@ -23,14 +29,17 @@
 <img class="ritual-front" src="assets/heritage-v1/ritual.webp" alt="" loading="lazy" aria-hidden="true">
 </section>
 <section class="scene light-story" id="cinema" aria-labelledby="light-title">
-<div class="scroll-world film" data-world="section" data-manifest="assets/films-lamp-v1/manifest.json" aria-hidden="true"><picture class="world-poster"><source media="(max-width:700px)" srcset="assets/films-lamp-v1/mobile-poster.webp"><img src="assets/films-lamp-v1/desktop-poster.webp" alt="" loading="lazy"></picture><canvas></canvas></div>
+<div class="scroll-world film" data-world="section" data-manifest="assets/lamp-motion-v2/manifest.json" aria-hidden="true"><picture class="world-poster"><source media="(max-width:700px)" srcset="assets/lamp-motion-v2/mobile-poster.webp"><img src="assets/films-lamp-v1/desktop-poster.webp" alt="" loading="lazy"></picture><canvas></canvas></div>
 <div class="film-wash" aria-hidden="true"></div>
 <div class="light-copy"><p class="eyebrow">As the lamps are lit</p><h2 id="light-title" data-words><span>A thousand lights.</span><span>One beautiful</span><span>beginning.</span></h2><p>In their warm glow,<br>we hope you will be there.</p></div>
 </section>
 <section class="scene memory" id="our-story" aria-labelledby="memory-title"><picture class="memory-setting" aria-hidden="true"><source media="(max-width:700px)" srcset="assets/heritage-v2/story-garden-small.webp"><img src="assets/heritage-v2/story-garden.webp" alt="" loading="lazy" width="1536" height="1024"></picture><div class="memory-wash" aria-hidden="true"></div><div class="memory-copy"><p class="eyebrow">For all the moments to come</p><h2 id="memory-title" data-words><span>A new chapter,</span><span>together.</span></h2><p>There is a special kind of happiness in celebrating with the people who have been part of our lives. We hope you will be there as we start this next chapter.</p></div><div class="swing"><img src="assets/couple-swing-rear-v2.webp" alt="The couple sharing a garden swing, seen from behind." loading="lazy" width="1024" height="1536"></div></section>
-<section class="scene celebrations" id="the-day" aria-labelledby="events-title"><header><p class="eyebrow">11 February 2027 · Neyyattinkara</p><h2 id="events-title" data-words><span>The celebrations</span></h2><p>Your moments. Our happiest memories.</p></header><div class="event-grid">
-<article class="event"><img class="event-art" src="assets/heritage-v1/celebration.webp" alt="" loading="lazy"><div class="event-copy"><p class="event-date">Thursday, 11 February</p><h3>The wedding</h3><p class="event-time">9:50–10:20 am</p><div class="fine-ornament" aria-hidden="true">✧</div><p>Sree Neelakeshi Auditorium</p><p class="small">Marayamuttom, Neyyattinkara</p><a href="https://maps.app.goo.gl/4KVBU7t3gQqdteF89" target="_blank" rel="noopener noreferrer">Ceremony directions ↗</a></div></article>
-<article class="event"><img class="event-art" src="assets/heritage-v1/celebration.webp" alt="" loading="lazy"><div class="event-copy"><p class="event-date">Thursday, 11 February</p><h3>The reception</h3><p class="event-time">5:00–9:00 pm</p><div class="fine-ornament" aria-hidden="true">✧</div><p>Sreeragam Convention Centre</p><p class="small">Neyyattinkara, Kerala</p><a href="https://maps.app.goo.gl/n62kWzBfGedgSaR29" target="_blank" rel="noopener noreferrer">Reception directions ↗</a></div></article>
-</div><p class="breakfast">Join us for breakfast before the ceremony, from 9:15 am.</p><a class="calendar" href="wedding.ics" download>Save the date</a></section>
+<section class="scene celebrations" id="the-day" aria-labelledby="events-title">
+<div class="celebrations-inner"><header><p class="celebration-date"><time datetime="2027-02-11">Thursday, 11 February 2027</time></p><h2 id="events-title" data-words><span>The celebrations</span></h2></header>
+<div class="event-grid">
+<article class="event"><div class="event-heading"><h3>Wedding ceremony</h3><p><time datetime="2027-02-11T09:50:00+05:30">9:50–10:20 am</time></p></div><h4>Sree Neelakeshi<br>Auditorium</h4><p class="event-address">Marayamuttom, Neyyattinkara</p><a href="https://maps.app.goo.gl/4KVBU7t3gQqdteF89" target="_blank" rel="noopener noreferrer" aria-label="Directions to Sree Neelakeshi Auditorium"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Get directions</a></article>
+<article class="event"><div class="event-heading"><h3>Evening reception</h3><p><time datetime="2027-02-11T17:00:00+05:30">5:00–9:00 pm</time></p></div><h4>Sreeragam<br>Convention Centre</h4><p class="event-address">Neyyattinkara, Kerala</p><a href="https://maps.app.goo.gl/n62kWzBfGedgSaR29" target="_blank" rel="noopener noreferrer" aria-label="Directions to Sreeragam Convention Centre"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Get directions</a></article>
+</div><div class="events-meta"><p>Breakfast served from 9:15 am<br><span>We look forward to celebrating with you.</span></p><a class="calendar" href="wedding.ics" download>Save the date</a></div></div>
+</section>
 <footer class="scene closing" id="until-then"><img class="closing-setting" src="assets/heritage-v2/cover-wide.webp" alt="" loading="lazy" width="1536" height="1024"><div class="closing-copy"><p class="eyebrow">Your presence is our greatest gift</p><h2 data-words><span>See you at</span><span>the wedding.</span></h2><p class="signature">Vinayak &amp; Aambadi</p><p>11 February 2027</p><a href="index.html">Wedding home ↗</a></div><img class="closing-ritual" src="assets/heritage-v1/ritual.webp" alt="" loading="lazy" aria-hidden="true" width="1536" height="1024"></footer>
 </main></body></html>

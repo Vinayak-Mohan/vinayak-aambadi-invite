@@ -1,0 +1,12 @@
+# Generated botanical depth layers
+
+Created with the built-in image generation tool, transparent background enabled. Optimized as RGBA WebP with mobile variants, preserving aspect ratio and alpha. Used for decorative layers within the invitation.
+
+## jasmine
+
+Use case: illustration-story. Asset type: transparent isolated foreground layer for a luxury Kerala wedding invitation website. A slender graceful hanging decoration: two asymmetrical natural ivory jasmine flower strings tied with fine antique-gold thread, a few tiny warm sage leaves and unopened buds near the small brass attachment loop at the TOP. Entire object in frame, portrait composition, genuine transparent background around all the flowers and between strings. Delicate organic irregularity and realistic jasmine anatomy, NOT a vector graphic, no line-art. Match refined hand-painted realism of a golden dawn Kerala courtyard illustration: natural warm sunlight from upper left, richly detailed tiny ivory petals, soft antique-gold highlights, muted olive greens. Slim proportions, lightly curved strings falling down, elegant and airy; not a dense floral curtain, no big bouquet. No ground, no wall, no text, no frame, no watermark, no scene, no rectangular haze or shadow background. Transparent negative space around the cutout; no petals cut at image edges. Intended for an outer screen edge so keep ornament slender.
++
+## frangipani
+
+Use case: illustration-story. Asset type: transparent botanical foreground corner layer for a premium Kerala wedding invitation. One naturally branching slender frangipani (plumeria) bough with elegant ivory five-petal flowers, subtle warm golden centres, a few unopened buds and realistic muted olive leaves. Composition: graceful corner canopy entering from the UPPER RIGHT, curving left and slightly downward, generous open negative space beneath and to the LEFT for invitation text and a separate couple illustration. All foliage fully in frame with breathing room, no chopped leaves or flower heads; transparent background everywhere outside the branch. Fine art hand-painted realism, detailed botanical petals, atmospheric warm early morning side light, antique gold and ivory palette with quiet sage greens. Natural proportions, NO vector or outlined graphic, no enormous leaves, no dense bouquet, no pedestal, no floor, no scenery, no border, no lettering, no watermark, no rectangular tint or shadow background. A standalone truly transparent cutout designed to blend with a painted Kerala courtyard garden.
+

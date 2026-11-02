@@ -124,29 +124,46 @@ h2 span{display:block}h3{font:500 40px/1.05 var(--serif)}
 @media(max-height:740px) and (max-width:700px){.cover-copy{padding-top:5svh}.cover h1{font-size:60px}.cover-copy .eyebrow{margin-bottom:12px}.date{margin-top:15px;font-size:21px}.cover-couple{height:33svh;min-height:195px;bottom:10svh}.open-letter{bottom:10px}.letter,.memory{padding-block:50px 65px}.light-story{min-height:760px}}
 @media(max-height:640px) and (max-width:700px){.cover{min-height:540px}.cover-copy{padding-top:25px}.cover h1{font-size:52px}.cover-copy .eyebrow{font-size:11px;line-height:1.45}.cover-couple{height:31svh;min-height:185px}.cover-copy .small{font-size:12px}.cover h1 i{margin:6px 0 8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important}.film canvas{display:none}.world-poster{opacity:1!important}}
-/* An embossed invitation seal opens the two paper leaves on deliberate tap. */
-.invite-gate[hidden]{display:none}
-.invite-gate{position:fixed;inset:0;z-index:50;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;place-items:center;color:var(--ink);perspective:1400px}
-.invitation-sealed,.invitation-sealed body{overflow:hidden;overscroll-behavior:none}
-.invitation-sealed .skip{display:none}
-.gate-panel{position:absolute;top:0;bottom:0;width:50.1%;z-index:-1;transition:transform .85s cubic-bezier(.22,1,.36,1);backface-visibility:hidden}
-.gate-panel-left{left:0;background:linear-gradient(95deg,#e7d5b7,#f2e5cd 88%,#d6bd94);transform-origin:left center;box-shadow:8px 0 35px #76522a10}
-.gate-panel-right{right:0;background:linear-gradient(265deg,#e7d5b7,#f2e5cd 88%,#e2cca8);transform-origin:right center}
-.gate-panel::after{content:'';position:absolute;inset:22px;border:1px solid #98733b33;pointer-events:none}.gate-panel-left::after{right:-1px;border-right:0}.gate-panel-right::after{left:-1px;border-left:0}
-.gate-heading{position:absolute;z-index:2;top:19svh;left:20px;right:20px;text-align:center;transition:opacity .25s,transform .45s}
-.gate-heading>p{font-size:13px;color:var(--soft);margin-bottom:16px}.gate-heading h2{font:500 clamp(32px,4vw,50px)/1.15 var(--serif);letter-spacing:-.025em}.gate-heading h2 i{font-weight:400;font-size:.8em}.gate-heading time{display:block;font-size:14px;margin-top:13px;color:var(--soft)}
-.invitation-seal{position:absolute;top:50%;left:50%;translate:-50% -50%;width:150px;height:150px;border-radius:50%;border:1px solid #aa854b;background:radial-gradient(circle at 35% 25%,#793d49,#552431 65%,#361822);padding:9px;cursor:pointer;box-shadow:inset 0 0 0 4px #6c3940,inset 0 0 0 5px #c3a06a70,0 12px 30px #50392723,0 2px 5px #50392735;transition:opacity .25s,scale .25s}
-.invitation-seal:focus-visible{outline:2px solid var(--ink);outline-offset:9px}.invitation-seal:active{scale:.97}
-.seal-face{position:relative;width:100%;height:100%;border:1px solid #c8a56d70;border-radius:50%;overflow:hidden;display:grid;place-items:center}
-.seal-face img{position:absolute;width:190px;height:152px;max-width:none;object-fit:contain;filter:drop-shadow(0 1px 1px #35151c)}
-.seal-light{position:absolute;inset:-40%;background:linear-gradient(110deg,transparent 40%,#ffedbb25 49%,#fff7d544 50%,transparent 59%);transform:translateX(-100%);pointer-events:none}
-.gate-prompt{position:absolute;top:calc(50% + 108px);left:24px;right:24px;text-align:center;font:500 24px/1.35 var(--serif);transition:opacity .25s,transform .45s}.gate-prompt span{display:block;margin-top:11px;color:var(--soft);font:13px/1.5 var(--sans)}
-.invite-gate.opening{pointer-events:none}.opening .gate-panel-left{transform:translateX(-103%) rotateY(-10deg)}.opening .gate-panel-right{transform:translateX(103%) rotateY(10deg)}.opening .invitation-seal{opacity:0;scale:1.1}.opening .gate-heading,.opening .gate-prompt{opacity:0;transform:translateY(-8px)}
-@media(prefers-reduced-motion:no-preference){.invite-gate:not(.opening) .invitation-seal{animation:seal-breathe 4.5s ease-in-out infinite}.invite-gate:not(.opening) .seal-light{animation:seal-foil 6s ease-in-out infinite}@keyframes seal-breathe{50%{box-shadow:inset 0 0 0 4px #6c3940,inset 0 0 0 5px #c3a06a70,0 15px 35px #50392730,0 2px 5px #50392735}}@keyframes seal-foil{0%,40%{transform:translateX(-100%)}70%,100%{transform:translateX(100%)}}}
-@media(max-height:650px){.gate-heading{top:13svh}.gate-heading>p{margin-bottom:10px}.gate-heading time{margin-top:10px}.invitation-seal{width:132px;height:132px}.seal-face img{width:170px;height:136px}.gate-prompt{top:calc(50% + 91px)}}
-@media(prefers-reduced-motion:reduce){.gate-panel{transition:opacity .15s}.opening .gate-panel{transform:none;opacity:0}.invitation-seal,.gate-heading,.gate-prompt{transition:opacity .15s}}
 @media(min-width:701px) and (max-height:760px){.celebrations{padding-block:38px}.celebrations h2{font-size:56px}.celebration-date{margin-bottom:15px}.event-grid{margin:34px 0 27px}.event-heading{margin-bottom:15px}.event h4{font-size:36px}.events-meta{padding-top:16px}}
 @media(max-width:700px){.celebration-date{font-size:14px}.event-heading h3{font-size:14px}.event-heading p{font-size:16px}.event-address{font-size:14px}.event>a{font-size:14px}.events-meta{font-size:13px}.calendar{font-size:14px}}
 @media(max-width:370px), (max-height:740px) and (max-width:700px){.celebration-date{font-size:13px}.event-heading h3{font-size:13px}.event-heading p{font-size:15px}.event-address{font-size:13px}.events-meta{font-size:12px}.calendar{font-size:13px}}
 @media(max-width:700px){.light-copy h2{font-size:clamp(40px,11.2vw,50px)}}
 @media(max-width:370px) and (max-height:640px){.celebrations{padding-block:12px}.event-grid{margin:20px 0 14px;gap:16px}.event:last-child{padding-top:16px}.event-heading{margin-bottom:8px}.event h4{font-size:27px}.events-meta{padding-top:10px}}
+/* A typographic monogram and one coordinated editorial curtain reveal. */
+.invite-gate[hidden]{display:none}
+.invite-gate{position:fixed;inset:0;z-index:50;isolation:isolate;overflow:hidden;min-height:100dvh;display:grid;place-items:center;color:#f2e4c9}
+.invitation-sealed,.invitation-sealed body{overflow:hidden;overscroll-behavior:none}.invitation-sealed .skip{display:none}
+.gate-curtains{position:absolute;inset:0;z-index:-2;display:flex;pointer-events:none}.gate-curtains span{flex:1;background:#3d222d;min-width:0;margin-right:-1px}
+.invite-gate::before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 45%,#94566529,transparent 65%);pointer-events:none;transition:opacity .25s}.invite-gate.opening::before{opacity:0}
+.gate-heading{position:absolute;top:18svh;left:22px;right:22px;text-align:center}.gate-heading>p{font-size:13px;color:#cdb690;margin-bottom:17px}.gate-heading h2{font:400 clamp(32px,4vw,50px)/1.15 var(--serif);letter-spacing:-.025em}.gate-heading h2 i{font-size:.8em}.gate-heading time{display:block;margin-top:15px;font-size:13px;color:#cdb690}
+.invitation-seal{position:absolute;top:50%;left:50%;translate:-50% -50%;width:190px;height:165px;border:0;padding:0;background:none;cursor:pointer;touch-action:manipulation}
+.invitation-seal:focus-visible{outline:1px solid #cfb889;outline-offset:10px}.invitation-seal:active .opening-flower{scale:.97}
+.gate-prompt{position:absolute;top:calc(50% + 112px);left:22px;right:22px;text-align:center;font:400 17px/1.4 var(--sans)}.gate-prompt span{display:block;margin-top:12px;font:12px/1.5 var(--sans);color:#cdb690}
+.invite-gate.opening{pointer-events:none}#names:focus{outline:none;background:transparent;box-shadow:none}
+@media(max-height:650px){.gate-heading{top:11svh}.gate-heading>p{margin-bottom:10px}.gate-heading time{margin-top:10px}.invitation-seal{width:165px;height:145px}.gate-prompt{top:calc(50% + 96px)}}
+.depth-floral{position:absolute;z-index:5;width:clamp(230px,23vw,350px);height:auto;object-fit:contain;pointer-events:none;opacity:.95}
+.floral--cover{left:-95px;top:-40px}.floral--cover-right{right:-90px;top:-150px;scale:-1 1}.floral--letter{right:-100px;top:-80px;z-index:2}.floral--memory{right:-100px;top:-20px;width:clamp(320px,35vw,510px);z-index:2}
+.scene-glow{position:absolute;inset:-12%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 65% 30%,#fff4ce44,transparent 45%);mix-blend-mode:soft-light}.glow--letter{background:radial-gradient(ellipse at 78% 58%,#fff6da99,transparent 45%)}.glow--memory{background:radial-gradient(ellipse at 75% 15%,#ffebba80,transparent 52%)}
+@supports ((animation-timeline:view()) and (animation-range:entry)){
+ @media(prefers-reduced-motion:no-preference){
+  .cover-copy{animation:type-depth linear both;animation-timeline:--scene;animation-range:exit 0% exit 100%}
+  .depth-floral{animation:floral-depth linear both;animation-timeline:--scene;animation-range:entry 0% exit 100%}
+  .floral--cover-right{animation-name:floral-near-depth}.scene-glow{animation:light-depth linear both;animation-timeline:--scene;animation-range:entry 0% exit 100%}
+  .letter-architecture{animation:none}.letter-architecture .frame-left{animation:far-column linear both;animation-timeline:--scene;animation-range:entry 0% exit 100%}.letter-architecture .frame-right{animation:middle-column linear both;animation-timeline:--scene;animation-range:entry 0% exit 100%}
+  .ritual-front{animation-name:ritual-depth}.letter-copy,.memory-copy{animation:quiet-type linear both;animation-timeline:--scene;animation-range:entry 0% exit 100%}
+  @keyframes type-depth{to{transform:translateY(-65px)}}@keyframes floral-depth{from{translate:0 65px}to{translate:0 -100px}}@keyframes floral-near-depth{from{translate:0 95px}to{translate:0 -140px}}@keyframes light-depth{from{translate:-15px -30px}to{translate:25px 45px}}
+  @keyframes far-column{from{translate:0 -12px}to{translate:0 12px}}@keyframes middle-column{from{translate:0 25px}to{translate:0 -40px}}@keyframes ritual-depth{from{translate:0 60px}to{translate:0 -65px}}@keyframes quiet-type{from{translate:0 10px}to{translate:0 -12px}}
+ }
+}
+@media(max-width:700px){.depth-floral{width:170px}.floral--cover{left:-78px;top:-20px}.floral--cover-right{right:-76px;top:-105px}.floral--letter{right:-80px;top:-80px}.floral--memory{width:220px;right:-60px;top:48%;z-index:2}}
+@media(prefers-reduced-motion:reduce){.flower-petal,.flower-bloom{animation:none!important}.depth-floral{translate:none!important}}
+
+/* A single fine-line flower acts as the loader and opening control. */
+.opening-flower{width:100%;height:100%;overflow:visible;transition:scale .2s}.flower-bloom{transform-origin:120px 120px}.flower-petal{stroke-dasharray:1;stroke-dashoffset:0}
+.gate-prompt .gate-action{font:400 17px/1.4 var(--sans);color:#f2e4c9;margin:0}.gate-prompt .gate-hint{margin-top:12px}.invitation-seal:disabled{cursor:progress}.invite-gate.opening .flower-bloom{animation:none}
+@media(prefers-reduced-motion:no-preference){.invite-gate:not(.is-ready) .flower-petal{animation:flower-loading 2.4s ease-in-out infinite;animation-delay:calc(var(--petal)*.1s)}.is-ready:not(.opening) .flower-petal{animation:flower-trace 1.5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--petal)*.07s)}.is-ready:not(.opening) .flower-bloom{animation:flower-breathe 5s ease-in-out 2s infinite}@keyframes flower-loading{0%{stroke-dashoffset:1;opacity:.3}50%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-1;opacity:.3}}@keyframes flower-trace{from{stroke-dashoffset:1;opacity:.3}to{stroke-dashoffset:0;opacity:1}}@keyframes flower-breathe{50%{transform:scale(1.035);opacity:.75}}}
+
+/* A quiet full-screen veil dissolves into the first scene. */
+.invite-gate::before{display:none}.gate-leaf{position:absolute;inset:0;isolation:isolate;background:radial-gradient(ellipse at 60% 40%,#4c2b37,#3d222d 70%)}
+.tulip-mark{height:100%;width:100%}.tulip-mark .flower-bloom{transform-origin:120px 140px}.invitation-seal{height:185px;width:170px}.gate-prompt{top:calc(50% + 125px)}
+@media(max-height:650px){.invitation-seal{height:155px;width:145px}.gate-prompt{top:calc(50% + 102px)}}
